@@ -1,0 +1,80 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    
+                    <h4>Account Details</h4>
+                      
+                </div>
+                <div class="panel-body">
+                    <form action="{{ route('user.update.profile.details') }}" method="post">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="old_username" value="{{ $data->username }}">
+                        <div class="form-group @if($errors->has('name')) has-error @endif">
+                            <label for="name">Full Name: </label>
+                            <input type="text" id="name" name="name" class="form-control" value="{{ $data->name }}">
+                            @if($errors->has('name'))
+                            <small class="text-block">{{ $errors->first('name') }}</small>
+                            @endif
+                        </div>
+                        <div class="form-group @if($errors->has('username')) has-error @endif">
+                            <label for="username">Username (email): </label>
+                            <input type="text" id="username" name="username" class="form-control" value="{{ $data->username }}">
+                            @if($errors->has('username'))
+                            <small class="text-block">{{ $errors->first('username') }}</small>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">Update Details</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    
+                    <h4>Account Password:</h4>
+                      
+                </div>
+                <div class="panel-body">
+                    <form action="{{ route('user.update.profile.password') }}" method="post">
+                        {{ csrf_field() }}
+                        
+                        <div class="form-group @if($errors->has('old_password')) has-error @endif">
+                            <label for="old_password">Current Password: </label>
+                            <input type="password" id="old_password" name="old_password" class="form-control">
+                            @if($errors->has('old_password'))
+                            <small class="text-block">{{ $errors->first('old_password') }}</small>
+                            @endif
+                        </div>
+                        <div class="form-group @if($errors->has('password')) has-error @endif">
+                            <label for="username">New Password: </label>
+                            <input type="password" id="password" name="password" class="form-control">
+                            @if($errors->has('password'))
+                            <small class="text-block">{{ $errors->first('password') }}</small>
+                            @endif
+                        </div>
+                        <div class="form-group @if($errors->has('password_confirmation')) has-error @endif">
+                            <label for="password_confirmation">Confirm Password: </label>
+                            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control">
+                            @if($errors->has('password_confirmation'))
+                            <small class="text-block">{{ $errors->first('password_confirmation') }}</small>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">Update Password</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
