@@ -15,7 +15,7 @@
 	DB_USERNAME=your_database_username
 	DB_PASSWORD=your_database_password
 
-8. open cmd prompt by shift + mouse-right-click on the project file and choose open command prompt here. Then type = composer install and run = php artisan key:generate
+8. open cmd prompt by shift + mouse-right-click on the project file and choose open command prompt here. Then type and run= composer install then type and run = php artisan key:generate
 
 9. then run php artisan serve
 
