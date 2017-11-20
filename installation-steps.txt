@@ -1,0 +1,22 @@
+1. install composer - https://getcomposer.org/
+
+2. open cmd prompt and run = composer global require "laravel/installer"
+
+3. download project files - https://github.com/oOlaalaaOo/crime-management/archive/master.zip
+
+4. Import database - crime-management.sql
+
+5. create a file and name it .env on the root project(on the downloaded project files)
+
+6. open .env.example and copy all of its content and paste it on .env(the file you created on step 5)
+
+7. then change these credentials:
+	DB_DATABASE=your_database_name
+	DB_USERNAME=your_database_username
+	DB_PASSWORD=your_database_password
+
+8. open cmd prompt by shift + mouse-right-click on the project file and choose open command prompt here. Then type php artisan key:generate
+
+9. then run php artisan serve
+
+10. open browser and browse - http://localhost:8000
