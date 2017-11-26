@@ -12,100 +12,111 @@
     
     <link rel="icon" href="{{ URL::asset('assets/img/logo.png_32x32.png') }}" type="image/png">
     <!-- Styles -->
-    <link href="{{ asset('assets/css/united.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/font-awesome.min.css') }}" rel="stylesheet">
-    <style type="text/css">
-        .well, .panel, .panel-heading, .jumbotron, .btn {
-            border-radius: 0px;
-        }
-        body {
-            background-color: #eee; 
-        }
-    </style>
+    <link href="{{ asset('inspinia/css/bootstrap.min.css') }} " rel="stylesheet">
+    <link href="{{ asset('inspinia/font-awesome/css/font-awesome.css') }} " rel="stylesheet">
+    <link href="{{ asset('inspinia/css/animate.css') }} " rel="stylesheet">
+    <link href="{{ asset('inspinia/css/style.css') }} " rel="stylesheet">
+
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
+
+<body class="md-skin">
+
+    <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element"> 
+                        <span>
+                            <img alt="image" class="img-thumbnail" src="{{ asset('assets/img/logo.png_96x96.png') }}" />
+                        </span>
+                    </div>
+                    <div class="logo-element">
+                        PNP
+                    </div>
+                </li>
+                @if(Auth::check())
+                    <li @if($active_menu == 'dashboard') class="active" @endif><a href="{{ route('login') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a></li>
+                    <li @if($active_menu == 'case') class="active" @endif><a href="{{ route('case.all') }}"><i class="fa fa-folder"></i> <span class="nav-label"> Case</span></a></li>
+                    <li @if($active_menu == 'victims') class="active" @endif><a href="{{ route('victim.all') }}"><i class="fa fa-address-book"></i> <span class="nav-label"> Victims</span></a></li>
+                    <li @if($active_menu == 'suspects') class="active" @endif><a href="{{ route('suspect.all') }}"><i class="fa fa-address-book"></i> <span class="nav-label"> Suspects</span></a></li>
+                    <li @if($active_menu == 'reports') class="active" @endif><a href="{{ route('reports') }}"><i class="fa fa-th-large"></i> <span class="nav-label"> Reports</span></a></li>
+                @endif
+{{--                 <li>
+                    <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">Mailbox </span><span class="label label-warning pull-right">16/24</span></a>
+                    <ul class="nav nav-second-level collapse">
+                        <li><a href="mailbox.html">Inbox</a></li>
+                        <li><a href="mail_detail.html">Email view</a></li>
+                        <li><a href="mail_compose.html">Compose email</a></li>
+                        <li><a href="email_template.html">Email templates</a></li>
+                    </ul>
+                </li>
+            </ul> --}}
+
+        </div>
+    </nav>
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top  " role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
-
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name') }}
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                    
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                    <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user"></i> {{ Auth::user()->username }}
                     </a>
-                </div>
-
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
+                    <ul class="dropdown-menu dropdown-alerts">
+                      
+                        <li @if($active_submenu == 'profile') class="active" @endif>
+                           
+                            <a href="{{ route('user.profile') }}">Profile</a>
+                           
+                        </li>
+                                    
                     </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                        @else
-                            <li @if($active_menu == 'dashboard') class="active" @endif><a href="{{ route('login') }}">Dashboard</a></li>
-                            <li @if($active_menu == 'case') class="active" @endif><a href="{{ route('case.all') }}">Case</a></li>
-                            <li @if($active_menu == 'victims') class="active" @endif><a href="{{ route('victim.all') }}">Victims</a></li>
-                            <li @if($active_menu == 'suspects') class="active" @endif><a href="{{ route('suspect.all') }}">Suspects</a></li>
-                            <li @if($active_menu == 'reports') class="active" @endif><a href="{{ route('reports') }}">Reports</a></li>
-                            <li class="dropdown @if($active_menu == 'account') active @endif">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu">
-                                    <li @if($active_submenu == 'profile') class="active" @endif><a href="{{ route('user.profile') }}">My Profile</a></li>
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        
-        <div class="container-fluid">
-            <div class="row"> 
-                <div class="col-xs-4 col-xs-offset-8"> 
-                    @if(session()->has('status'))
-                        <div class="alert alert-warning alert-dismissible" role="alert">
-                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                          <u>{{ session()->get('status') }}</u>
-                        </div>
-                    @endif
-                </div>
-            </div>
-            @yield('content')
+                </li>
+                </li>
+                    
+                <li>
+                    <a href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
+                </li>
+                </ul>
+            </nav>
         </div>
 
+
+        @yield('content')
+
+
+        <div class="footer fixed">
+            <div class="pull-right">
+                10GB of <strong>250GB</strong> Free.
+            </div>
+            <div>
+                Reserved @ PNP: Crime-Management System - Cagayan de Oro City, 2014-2017
+            </div>
+        </div>
+    </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery-validate-v1.17.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
+
+    <!-- Mainly scripts -->
+    <script src="{{ asset('inspinia/js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ asset('inspinia/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('inspinia/js/inspinia.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/pace/pace.min.js') }}"></script>
 </body>
 </html>

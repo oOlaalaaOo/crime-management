@@ -1,78 +1,65 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>INSPINIA | Login</title>
+        <!-- Styles -->
+        <link href="{{ asset('inspinia/css/bootstrap.min.css') }} " rel="stylesheet">
+        <link href="{{ asset('inspinia/font-awesome/css/font-awesome.css') }} " rel="stylesheet">
+        <link href="{{ asset('inspinia/css/animate.css') }} " rel="stylesheet">
+        <link href="{{ asset('inspinia/css/style.css') }} " rel="stylesheet">
+    </head>
+    <body class="gray-bg">
+        <div class="middle-box text-center loginscreen animated fadeInDown">
+            <div>
+                
+                <img src="{{ URL::asset('assets/img/logo.png_96x96.png') }}" class="img-thumbnail">
+                
+                <p>PNP: Crime Management System</p>
+                <form class="m-t" method="POST" action="{{ route('login') }}">
+                    {{ csrf_field() }}
+                    <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-xs-4 text-right">
-                            <img class="img-thumbnail" src="{{ URL::asset('assets/img/logo.png_96x96.png') }}">
-                        </div>
-                        <div class="col-xs-8 text-left">
-                            <br />
-                            <h4>Philippine National Police</h4>
-                            <small>Cagayan de Oro City, Misamis Oriental</small>
-                        </div>
+                        <input id="username" type="email" class="form-control" name="username" value="{{ old('username') }}" autofocus placeholder="Username/Email">
+                        @if ($errors->has('username'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('username') }}</strong>
+                        </span>
+                        @endif
+                        
                     </div>
-                    <hr>
-                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-                        {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
-                            <label for="username" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="username" type="email" class="form-control" name="username" value="{{ old('username') }}" autofocus>
-
-                                @if ($errors->has('username'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('username') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
+                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                        
+                        
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Password">
+                        @if ($errors->has('password'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('password') }}</strong>
+                        </span>
+                        @endif
+                        
+                    </div>
+                    <div class="form-group">
+                        
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
+                            </label>
                         </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-info btn-block">
-                                    Login
-                                </button>
-
-                                {{-- <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    Forgot Your Password?
-                                </a> --}}
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        
+                        <button type="submit" class="btn btn-primary block full-width m-b">
+                        Login
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>
-</div>
-@endsection
+        <!-- Mainly scripts -->
+        <script src="{{ asset('inspinia/js/jquery-3.1.1.min.js') }}"></script>
+        <script src="{{ asset('inspinia/js/bootstrap.min.js') }}"></script>
+    </body>
+</html>
