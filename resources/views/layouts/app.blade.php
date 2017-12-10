@@ -14,12 +14,14 @@
     <!-- Styles -->
     <link href="{{ asset('inspinia/css/bootstrap.min.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/font-awesome/css/font-awesome.css') }} " rel="stylesheet">
+    <link href="{{ asset('inspinia/css/plugins/footable/footable.core.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/css/animate.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/css/style.css') }} " rel="stylesheet">
-
+    <link href="{{ asset('inspinia/css/plugins/slick/slick.css') }} " rel="stylesheet">
+    <link href="{{ asset('inspinia/css/plugins/slick/slick-theme.css') }} " rel="stylesheet">
 </head>
 
-<body class="md-skin">
+<body class="skin-3">
 
     <div id="wrapper">
         <nav class="navbar-default navbar-static-side" role="navigation">
@@ -38,6 +40,9 @@
                 @if(Auth::check())
                     <li @if($active_menu == 'dashboard') class="active" @endif><a href="{{ route('login') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a></li>
                     <li @if($active_menu == 'case') class="active" @endif><a href="{{ route('case.all') }}"><i class="fa fa-folder"></i> <span class="nav-label"> Case</span></a></li>
+                    @if(Auth::user()->user_type_id == 1)
+                    <li @if($active_submenu == 'users') class="active" @endif><a href="{{ route('users.all') }}"><i class="fa fa-user-secret"></i> <span class="nav-label"> Officers</span></a></li>
+                    @endif
                     <li @if($active_menu == 'victims') class="active" @endif><a href="{{ route('victim.all') }}"><i class="fa fa-address-book"></i> <span class="nav-label"> Victims</span></a></li>
                     <li @if($active_menu == 'suspects') class="active" @endif><a href="{{ route('suspect.all') }}"><i class="fa fa-address-book"></i> <span class="nav-label"> Suspects</span></a></li>
                     <li @if($active_menu == 'reports') class="active" @endif><a href="{{ route('reports') }}"><i class="fa fa-th-large"></i> <span class="nav-label"> Reports</span></a></li>
@@ -75,7 +80,11 @@
                             <a href="{{ route('user.profile') }}">Profile</a>
                            
                         </li>
-                                    
+                        @if(Auth::user()->user_type_id == 1)
+                        <li @if($active_submenu == 'users') class="active" @endif>
+                            <a href="{{ route('users.all') }}">Users (Officer)</a>
+                        </li>
+                        @endif            
                     </ul>
                 </li>
                 </li>
@@ -100,7 +109,7 @@
 
         <div class="footer fixed">
             <div class="pull-right">
-                10GB of <strong>250GB</strong> Free.
+                
             </div>
             <div>
                 Reserved @ PNP: Crime-Management System - Cagayan de Oro City, 2014-2017
@@ -109,8 +118,6 @@
     </div>
     </div>
 
-    <script src="{{ asset('assets/js/scripts.js') }}"></script>
-
     <!-- Mainly scripts -->
     <script src="{{ asset('inspinia/js/jquery-3.1.1.min.js') }}"></script>
     <script src="{{ asset('inspinia/js/bootstrap.min.js') }}"></script>
@@ -118,5 +125,49 @@
     <script src="{{ asset('inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ asset('inspinia/js/inspinia.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/pace/pace.min.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/footable/footable.all.min.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/slick/slick.min.js') }}"></script>
+    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    <!-- Page-Level Scripts -->
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+            $('.footable2').footable();
+
+            $('.slick_demo_2').slick({
+                infinite: true,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                centerMode: true,
+                responsive: [
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 3,
+                            infinite: true,
+                            dots: true
+                        }
+                    },
+                    {
+                        breakpoint: 600,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+        });
+
+    </script>
 </body>
 </html>

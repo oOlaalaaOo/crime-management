@@ -8,10 +8,13 @@ use DB;
 use Validator;
 use Auth;
 use Hash;
+use App\User;
 
 class UserController extends Controller
 {
     public function __construct() {
+
+      
 
     }
 
@@ -22,9 +25,9 @@ class UserController extends Controller
    						->first();
 
    		return view('profile')
-   				->with('active_menu', 'account')
-                ->with('active_submenu', 'profile')
-                ->with('data', $data);
+   				   ->with('active_menu', 'account')
+                  ->with('active_submenu', 'profile')
+                  ->with('data', $data);
    }
 
    public function update_profile_details(Request $request) {
@@ -95,5 +98,59 @@ class UserController extends Controller
 		}
 
 		
+   }
+
+   public function all() {
+      $users = DB::table('users')->where('user_type_id', '!=', 1)->get();
+      $total_user_cases = DB::table('user_cases')->where('user_id', Auth::user()->user_id)->count();
+      $ongoing_user_cases = DB::table('user_cases')
+                              ->leftJoin('cases', 'user_cases.case_id', '=', 'cases.case_id')
+                              ->where('user_cases.user_id', Auth::user()->user_id)
+                              ->where('cases.case_status', '=', 'ongoing')
+                              ->count();
+      $completed_user_cases = DB::table('user_cases')
+                              ->leftJoin('cases', 'user_cases.case_id', '=', 'cases.case_id')
+                              ->where('user_cases.user_id', Auth::user()->user_id)
+                              ->where('cases.case_status', '=', 'completed')
+                              ->count();
+
+      return view('users.show-all')       
+               ->with('active_menu', 'account')
+               ->with('active_submenu', 'users')
+               ->with('users', $users)
+               ->with('total_user_cases', $total_user_cases)
+               ->with('ongoing_user_cases', $ongoing_user_cases)
+               ->with('completed_user_cases', $completed_user_cases);
+   }
+
+   public function add_view() {
+      return view('users.add-view')
+                  ->with('active_menu', 'account')
+                  ->with('active_submenu', '');
+   }
+
+   public function add(Request $request) {
+      $validator = Validator::make($request->all(), [
+         'name' => 'required',
+         'username' => 'required|email|unique:users,username',
+         'password' => 'required|confirmed'
+      ]);
+
+      if ($validator->fails()) {
+         return redirect()->back()->withErrors($validator)->withInput();
+      }
+
+      $user = new User;
+      $user->name = $request->name;
+      $user->username = $request->username;
+      $user->password = bcrypt($request->password);
+      $user->status = 'active';
+      $user->user_type_id = 2;
+      $user->police_station_id = 1;
+
+      if ($user->save()) {
+         session()->flash('status', 'Successfully user added');
+         return redirect()->route('users.all');
+      }
    }
 }

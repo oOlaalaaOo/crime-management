@@ -24,61 +24,63 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Case List</h5>
-                    <div class="ibox-content">
-                        <form action="{{ route('suspect.search') }}" method="GET">
-                            <div class="form-group @if($errors->has('name')) has-error @endif">
-                                @if($errors->has('name')) 
-                                        <small class="text-block">{{ $errors->first('name') }}</small>
-                                @endif
-                                <div class="input-group">
-                                  <input type="text" class="form-control" aria-label="" name="name">
-                                  <div class="input-group-btn">
+                    <h2>Suspect List</h2>
+                </div>
+                <div class="ibox-content">
+                    <form action="{{ route('suspect.search') }}" method="GET">
+                        <div class="form-group @if($errors->has('name')) has-error @endif">
+                            @if($errors->has('name'))
+                            <small class="text-block">{{ $errors->first('name') }}</small>
+                            @endif
+                            <div class="input-group">
+                                <input type="text" class="form-control" aria-label="" name="name" placeholder="You may enter the person first name or middle name or last name">
+                                <div class="input-group-btn">
                                     <!-- Buttons -->
-                                    <button class="btn btn-default" type="submit">Search</button>
-                                  </div>
+                                    <button class="btn btn-primary" type="submit">Search</button>
                                 </div>
                             </div>
-                        </form> 
-                        @if(isset($name))
-                            Search for Suspect Name: <u>{{ $name }}</u>
-                            <br /><br />
-                        @endif
-                        @if(count($suspects) > 0)
-                        <ul class="list-group">
+                        </div>
+                    </form>
+                    @if(isset($name))
+                    Search result for: <u>{{ $name }}</u>
+                    <br /><br />
+                    @endif
+                    @if(count($suspects) > 0)
+                    <table class="footable table table-stripped toggle-arrow-tiny">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Nationality</th>
+                                <th>Birth Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             @foreach($suspects as $data)
-                            
-                              <li class="list-group-item">
-                                <button class="btn btn-xs btn-default" data-toggle="modal" data-target="#more_details{{ $data->suspect_id }}">see more..</button><br /><br />
-                                Name: {{ $data->name }} <span class="badge">{{ date('F d, Y', strtotime($data->created_at)) }}</span><br />
-                                Nationality: {{ ucfirst($data->nationality) }}<br />
-                                
-                              </li> 
-                            <!-- Modal -->
-                            <div class="modal fade" id="more_details{{ $data->suspect_id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                              <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">{{ $data->name }}</h4>
-                                  </div>
-                                  <div class="modal-body">
-                                    <label>Address: </label>&nbsp;&nbsp;<small>{{ $data->address }}</small><br />
-                                    <label>Occupation: </label>&nbsp;&nbsp;<small>{{ $data->occupation }}</small><br />
-                                    <label>Birth Date: </label>&nbsp;&nbsp;<small>{{ date('F d, Y', strtotime($data->birth_date)) }}</small><br />
-                                    <label>Gender: </label>&nbsp;&nbsp;<small>{{ $data->gender }}</small><br />
-                                    <label>Civil Status: </label>&nbsp;&nbsp;<small>{{ $data->civil_status }}</small><br />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            <tr>
+                                <td>{{ $loop->index + 1 }}</td>
+                                <td>{{ $data->first_name . ' ' . $data->mid_name . ' ' . $data->last_name }}</td>
+                                <td>{{ ucfirst($data->gender) }}</td>
+                                <td>{{ ucfirst($data->nationality) }}</td>
+                                <td>{{ date('F d, Y', strtotime($data->birth_date)) }}</td>
+                                <td><a href="{{ route('suspect.update.view', ['suspect_id' => $data->suspect_id, 'case_id' => $data->case_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-pencil"></i> Update</a></td>
+                            </tr>
                             @endforeach
-                            </ul>
-                            {{ $suspects->links() }}
-                        @else
-                        <h3>No Result</h3>
-                        @endif
-                    </div>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    
+                    @else
+                    <h3>No Result</h3>
+                    @endif
                 </div>
             </div>
         </div>

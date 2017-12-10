@@ -3,20 +3,31 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>INSPINIA | Login</title>
+        <title>PNP | Crime Management System</title>
         <!-- Styles -->
         <link href="{{ asset('inspinia/css/bootstrap.min.css') }} " rel="stylesheet">
         <link href="{{ asset('inspinia/font-awesome/css/font-awesome.css') }} " rel="stylesheet">
         <link href="{{ asset('inspinia/css/animate.css') }} " rel="stylesheet">
         <link href="{{ asset('inspinia/css/style.css') }} " rel="stylesheet">
     </head>
-    <body class="gray-bg">
-        <div class="middle-box text-center loginscreen animated fadeInDown">
-            <div>
-                
-                <img src="{{ URL::asset('assets/img/logo.png_96x96.png') }}" class="img-thumbnail">
-                
-                <p>PNP: Crime Management System</p>
+    <body class="">
+        <div class="middle-box animated fadeInDown ">
+            <div class="ibox">
+                <div class="ibox-title text-center">
+                    <h4>Philippine National Police</h4>
+                </div>
+                <div class="ibox-content">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <img src="{{ URL::asset('assets/img/logo.png_96x96.png') }}" class="img-thumbnail">
+                        
+                        
+                    </div>
+                    <div class="col-xs-8">
+                        <h4><strong>Crime Management System</strong></h4>
+                        <p>Cagayan de Oro City, Misamis Oriental, <br />9000, Philippines</p>
+                    </div>
+                </div>
                 <form class="m-t" method="POST" action="{{ route('login') }}">
                     {{ csrf_field() }}
                     <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
@@ -56,6 +67,7 @@
                         </button>
                     </div>
                 </form>
+                </div>
             </div>
         </div>
         <!-- Mainly scripts -->

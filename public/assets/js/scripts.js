@@ -92,7 +92,7 @@ $(document).ready(function() {
 					data.forEach((d) => {
 						$crime_category.append($('<option>', { 
 					        value: d.crime_category_id,
-					        text : d.name 
+					        text : d.crime_category_name 
 					    }));
 					});
 				}
@@ -100,5 +100,20 @@ $(document).ready(function() {
 		});
 	}
 
+	function readURL(input) {
 
+  	if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+
+	    reader.onload = function(e) {
+	      $('#photoPreview').attr('src', e.target.result);
+	    }
+
+	    reader.readAsDataURL(input.files[0]);
+	  }
+	}
+
+	$("#photoFile").change(function() {
+	  readURL(this);
+	});
 });
