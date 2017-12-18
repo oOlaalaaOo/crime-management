@@ -15,7 +15,7 @@
     </div>
     <div class="col-sm-8">
         <div class="title-action">
-            <a class="btn btn-warning" href="{{ route('home') }}"><i class="fa fa-arrow-left"></i> Case List</a>
+            <a class="btn btn-warning" href="{{ route('case.all') }}"><i class="fa fa-arrow-left"></i> Case List</a>
         </div>
     </div>
 </div>

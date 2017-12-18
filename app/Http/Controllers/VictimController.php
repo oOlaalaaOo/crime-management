@@ -19,6 +19,7 @@ class VictimController extends Controller
     }
 
     public function all() {
+        
     	$victims = DB::table('case_victims')                         
                             ->leftJoin('victims', 'case_victims.victim_id', '=', 'victims.victim_id')
                             ->get();
