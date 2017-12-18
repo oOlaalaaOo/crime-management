@@ -119,6 +119,7 @@ class SuspectController extends Controller
             $suspect_file->save();
         }
 
+        session()->flash('status', true);
         return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
 
@@ -198,6 +199,7 @@ class SuspectController extends Controller
             $suspect_file->save();
         }
 
+        session()->flash('status', true);
         return redirect()->route('case.details', ['suspect_id' => $suspect->suspect_id, 'case_id' => $request->input('case_id')]);
     }
 }

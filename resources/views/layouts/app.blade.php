@@ -15,6 +15,7 @@
     <link href="{{ asset('inspinia/css/bootstrap.min.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/font-awesome/css/font-awesome.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/css/plugins/footable/footable.core.css') }} " rel="stylesheet">
+    <link href="{{ asset('inspinia/css/plugins/toastr/toastr.min.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/css/animate.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/css/style.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/css/plugins/slick/slick.css') }} " rel="stylesheet">
@@ -38,14 +39,31 @@
                     </div>
                 </li>
                 @if(Auth::check())
+
                     <li @if($active_menu == 'dashboard') class="active" @endif><a href="{{ route('login') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a></li>
-                    <li @if($active_menu == 'case') class="active" @endif><a href="{{ route('case.all') }}"><i class="fa fa-folder"></i> <span class="nav-label"> Case</span></a></li>
+
                     @if(Auth::user()->user_type_id == 1)
-                    <li @if($active_submenu == 'users') class="active" @endif><a href="{{ route('users.all') }}"><i class="fa fa-user-secret"></i> <span class="nav-label"> Officers</span></a></li>
-                    @endif
-                    <li @if($active_menu == 'victims') class="active" @endif><a href="{{ route('victim.all') }}"><i class="fa fa-address-book"></i> <span class="nav-label"> Victims</span></a></li>
-                    <li @if($active_menu == 'suspects') class="active" @endif><a href="{{ route('suspect.all') }}"><i class="fa fa-address-book"></i> <span class="nav-label"> Suspects</span></a></li>
+                        
+                        <li @if($active_submenu == 'users') class="active" @endif><a href="{{ route('users.all') }}"><i class="fa fa-user-secret"></i> <span class="nav-label"> Officers</span></a></li>
+
+                        <li @if($active_menu == 'crimes') class="active" @endif>
+                            <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Crime Management </span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse @if($active_menu == 'crimes') in @endif">
+                                <li @if($active_submenu == 'crime_type') class="active" @endif><a href="{{ route('crime.type.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Crime Types</span></a></li>
+                                <li @if($active_submenu == 'crime_category') class="active" @endif><a href="{{ route('crime.category.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Crime Categories</span></a></li>
+                                <li @if($active_submenu == 'crime_classification') class="active" @endif><a href="{{ route('crime.classification.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Crime Classifications</span></a></li>
+                            </ul>
+                        </li>
+                    @else                  
+
+                        <li @if($active_menu == 'case') class="active" @endif><a href="{{ route('case.all') }}"><i class="fa fa-folder"></i> <span class="nav-label"> Case</span></a></li>
+                        <li @if($active_menu == 'victims') class="active" @endif><a href="{{ route('victim.all') }}"><i class="fa fa-address-book"></i> <span class="nav-label"> Victims</span></a></li>
+                        <li @if($active_menu == 'suspects') class="active" @endif><a href="{{ route('suspect.all') }}"><i class="fa fa-address-book"></i> <span class="nav-label"> Suspects</span></a></li>
+
+                    @endif           
+                    
                     <li @if($active_menu == 'reports') class="active" @endif><a href="{{ route('reports') }}"><i class="fa fa-th-large"></i> <span class="nav-label"> Reports</span></a></li>
+
                 @endif
 {{--                 <li>
                     <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">Mailbox </span><span class="label label-warning pull-right">16/24</span></a>
@@ -127,6 +145,7 @@
     <script src="{{ asset('inspinia/js/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/footable/footable.all.min.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/slick/slick.min.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/toastr/toastr.min.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
     <!-- Page-Level Scripts -->
     <script>
@@ -166,6 +185,18 @@
                     }
                 ]
             });
+
+            @if(session()->has('status') && session()->get('status') == true)
+                
+                    // Display a success toast, with a title
+                    toastr.success('Action: Ok');
+                
+            @elseif(session()->has('status') && session()->get('status') == false)
+                
+                    // Display a success toast, with a title
+                    toastr.error('Action: Error');
+                
+            @endif
         });
 
     </script>

@@ -65,4 +65,25 @@ Route::get('users/all', 'UserController@all')->name('users.all');
 Route::get('users/add', 'UserController@add_view')->name('users.add.view');
 Route::post('users/add', 'UserController@add')->name('users.add');
 
+Route::get('crime/type/all', 'CrimeTypeController@all')->name('crime.type.all');
+Route::get('crime/type/add', 'CrimeTypeController@add_view')->name('crime.type.add.view');
+Route::post('crime/type/add', 'CrimeTypeController@add')->name('crime.type.add');
+Route::get('crime/type/update/{crime_type_id}', 'CrimeTypeController@update_view')->name('crime.type.update.view');
+Route::post('crime/type/update', 'CrimeTypeController@update')->name('crime.type.update');
+Route::post('crime/type/delete', 'CrimeTypeController@delete')->name('crime.type.delete');
+
+Route::get('crime/category/all', 'CrimeCategoryController@all')->name('crime.category.all');
+Route::get('crime/category/add', 'CrimeCategoryController@add_view')->name('crime.category.add.view');
+Route::post('crime/category/add', 'CrimeCategoryController@add')->name('crime.category.add');
+Route::get('crime/category/update/{crime_category_id}', 'CrimeCategoryController@update_view')->name('crime.category.update.view');
+Route::post('crime/category/update', 'CrimeCategoryController@update')->name('crime.category.update');
+Route::post('crime/category/delete', 'CrimeCategoryController@delete')->name('crime.category.delete');
+
+Route::get('crime/classification/all', 'CrimeClassificationController@all')->name('crime.classification.all');
+Route::get('crime/classification/add', 'CrimeClassificationController@add_view')->name('crime.classification.add.view');
+Route::post('crime/classification/add', 'CrimeClassificationController@add')->name('crime.classification.add');
+Route::get('crime/classification/update/{crime_classification_id}', 'CrimeClassificationController@update_view')->name('crime.classification.update.view');
+Route::post('crime/classification/update', 'CrimeClassificationController@update')->name('crime.classification.update');
+Route::post('crime/classification/delete', 'CrimeClassificationController@delete')->name('crime.classification.delete');
+
 Route::get('reports', 'ReportController@index')->name('reports');

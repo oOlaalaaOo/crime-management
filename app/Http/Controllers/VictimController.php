@@ -125,6 +125,7 @@ class VictimController extends Controller
 
         $victim_file->save();
 
+        session()->flash('status', true);
         return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
 
@@ -204,6 +205,7 @@ class VictimController extends Controller
             $victim_file->save();
         }
 
+        session()->flash('status', true);
         return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
 }

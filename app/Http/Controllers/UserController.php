@@ -55,11 +55,11 @@ class UserController extends Controller
    					->where('user_id', '=', Auth::user()->user_id)
    					->update(['name' => $name, 'username' => $username]);
    		if ($result) {
-   			session()->flash('status', 'Successfully updated!');
+   			session()->flash('status', true);
    			return redirect()->back();
    		}
 
-   		session()->flash('status', 'Error, Something went wrong!');
+   		session()->flash('status', false);
    		return redirect()->back();
    }
 
@@ -84,11 +84,11 @@ class UserController extends Controller
 						->update(['password' => Hash::make($request->input('password'))]);
 
 			if ($result) {
-	   			session()->flash('status', 'Successfully updated!');
+	   			session()->flash('status', true);
 	   			return redirect()->back();
 	   		}
 
-	   		session()->flash('status', 'Error, Something went wrong!');
+	   		session()->flash('status', false);
 	   		return redirect()->back();
 
 		} else {
@@ -149,8 +149,13 @@ class UserController extends Controller
       $user->police_station_id = 1;
 
       if ($user->save()) {
-         session()->flash('status', 'Successfully user added');
+         session()->flash('status', true);
          return redirect()->route('users.all');
       }
+
+      session()->flash('status', false);
+
+      return redirect()->route('users.all');
+      
    }
 }

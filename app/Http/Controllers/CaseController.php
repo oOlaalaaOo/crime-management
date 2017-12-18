@@ -103,11 +103,11 @@ class CaseController extends Controller
     		$user_case->case_id = $case->case_id;
     		$user_case->save();
 
-    		session()->flash('status', 'Case was successfully added!');
+    		session()->flash('status', true);
     		return redirect()->route('home');
     	} 
 
-    	session()->flash('status', 'Something went wrong on adding new case');
+    	session()->flash('status', false);
     	return redirect()->route('home');
 
     }
@@ -123,6 +123,7 @@ class CaseController extends Controller
                         ->leftJoin('crime_categories', 'offenses.crime_category_id', '=', 'crime_categories.crime_category_id')
                         ->leftJoin('crime_types', 'crime_categories.crime_type_id', '=', 'crime_types.crime_type_id')
                         ->leftJoin('users', 'user_cases.user_id', '=', 'users.user_id')
+                        ->where('user_cases.user_id', '=', Auth::user()->user_id)
                         ->get();
 
         return view('cases.show-all')
@@ -243,11 +244,11 @@ class CaseController extends Controller
 
         if ($case->save()) {
 
-            session()->flash('status', 'Case was successfully added!');
+            session()->flash('status', true);
             return redirect()->route('case.show', ['case_id' => $request->input('case_id')]);
         } 
 
-        session()->flash('status', 'Something went wrong on adding new case');
+        session()->flash('status', false);
         return redirect()->route('home');
     }
 
@@ -323,6 +324,7 @@ class CaseController extends Controller
         $case_folder->case_image = $filename;
         $case_folder->save();
 
+        session()->flash('status', true);
         return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
 
@@ -332,6 +334,7 @@ class CaseController extends Controller
         $case->case_status = 'closed';
         $case->save();
 
+        session()->flash('status', true);
         return redirect()->route('case.all');
 
     }

@@ -20,3 +20,27 @@
 9. then run php artisan serve
 
 10. open browser and browse - http://localhost:8000
+
+
+//edungag
+add crud for crimes
+change case unique no generation
+many-to-many relationship in case over victim/suspect
+reports
+google maps
+dashboard graphs
+add controls for admin in users
+search for case status
+unsay mga tabs for admin side
+
+admin:
+	- Dashboard
+	- Users(officer)
+	- reports
+
+Member:
+	- Dashboard
+	- Case
+	- Victims
+	- Suspects
+	- Reports
