@@ -39,8 +39,26 @@ trait AuthenticatesUsers
             return $this->sendLockoutResponse($request);
         }
 
-        if ($this->attemptLogin($request)) {
-            return $this->sendLoginResponse($request);
+        // if ($this->attemptLogin($request)) {
+        //     return $this->sendLoginResponse($request);
+        // }
+
+        if ($this->guard()->validate($this->credentials($request))) {
+            $user = $this->guard()->getLastAttempted();
+
+            // Make sure the user is active
+            if ($user->status == 'active' && $this->attemptLogin($request)) {
+                // Send the normal successful login response
+                return $this->sendLoginResponse($request);
+            } else {
+                // Increment the failed login attempts and redirect back to the
+                // login form with an error message.
+                $this->incrementLoginAttempts($request);
+                return redirect()
+                    ->back()
+                    ->withInput($request->only($this->username(), 'remember'))
+                    ->withErrors(['active' => 'You cannot login, your account status is currently set to inactive.']);
+            }
         }
 
         // If the login attempt was unsuccessful we will increment the number of attempts

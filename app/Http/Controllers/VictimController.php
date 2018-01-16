@@ -58,10 +58,52 @@ class VictimController extends Controller
     }
 
     public function add_view($case_id) {
+
+        $old_victims = [];
+
+        $cases = \App\Case_victim::where('case_id', '=', $case_id)->get();
+
+        foreach ($cases as $case)
+        {
+            $old_victims[] = $case->victim_id;
+        }
+
+        $victims = \App\Victim::whereNotIn('victim_id', $old_victims)->get();
+
         return view('victims.add-view')
                 ->with('active_menu', 'victims')
                 ->with('active_submenu', '')
-                ->with('case_id', $case_id);
+                ->with('case_id', $case_id)
+                ->with('victims', $victims);
+    }
+
+    public function add_exist(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'victim_id' => 'required',
+            'victim_status' => 'required'
+        ]);
+
+        if ($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $case_victim = new Case_victim;
+        $case_victim->case_id = $request->input('case_id');
+        $case_victim->victim_id = $request->input('victim_id');
+        $case_victim->victim_status = $request->input('victim_status');
+
+        if ($case_victim->save())
+        {
+            session()->flash('status', true);
+        }
+        else
+        {
+            session()->flash('status', false);
+        }
+
+        return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
 
     public function add(Request $request) {

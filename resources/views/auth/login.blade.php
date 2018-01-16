@@ -35,8 +35,14 @@
                         <input id="username" type="email" class="form-control" name="username" value="{{ old('username') }}" autofocus placeholder="Username/Email">
                         @if ($errors->has('username'))
                         <span class="help-block">
-                            <strong>{{ $errors->first('username') }}</strong>
+                            {{ $errors->first('username') }}
                         </span>
+                        @endif
+
+                        @if ($errors->has('active'))
+                            <span class="help-block">
+                                {{ $errors->first('active') }}
+                            </span>
                         @endif
                         
                     </div>
@@ -46,7 +52,7 @@
                         <input id="password" type="password" class="form-control" name="password" placeholder="Password">
                         @if ($errors->has('password'))
                         <span class="help-block">
-                            <strong>{{ $errors->first('password') }}</strong>
+                            {{ $errors->first('password') }}
                         </span>
                         @endif
                         

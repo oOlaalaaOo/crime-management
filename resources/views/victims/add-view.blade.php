@@ -18,7 +18,7 @@
     </div>
     <div class="col-sm-8">
         <div class="title-action">
-            <a class="btn btn-default" href="{{ route('victim.all') }}"><i class="fa fa-arrow-left"></i> Case List</a>
+            <a class="btn btn-default" href="{{ route('case.all') }}"><i class="fa fa-arrow-left"></i> Case List</a>
         </div>
     </div>
 </div>
@@ -30,10 +30,66 @@
                     <h2>Victim Details</h2>
                 </div>
                 <div class="ibox-content">
+                    <form action="{{ route('victim.add.exist') }}" method="post">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="case_id" value="{{ $case_id }}">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="form-group @if($errors->has('victim_id')) has-error @endif"">
+                                    <h2>Is victim already exist?</h2><br />
+                                    <label>Search Victim</label>
+                                    <select name="victim_id" data-placeholder="Select Victim.." class="chosen-select">
+                                        <option value="">-Select Victim Here-</option>
+                                        @foreach ($victims as $victim)
+                                            <option value="{{ $victim->victim_id }}">{{ $victim->first_name . ' ' . $victim->mid_name . ' ' . $victim->last_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('victim_id'))
+                                    <span class="help-block">{{ $errors->first('victim_id') }}</span>
+                                    @endif
+                                </div>
+
+                                <div class="form-group @if($errors->has('victim_status')) has-error @endif">
+                                    <label for="victim_status">Status: </label>
+                                    <input type="text" id="victim_status" name="victim_status" class="form-control input-sm" value="{{ old('victim_status') }}">
+                                    @if($errors->has('victim_status'))
+                                    <span class="help-block">{{ $errors->first('victim_status') }}</span>
+                                    @endif
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="button" data-toggle="modal" data-target="#submit-case1" class="btn btn-success btn-lg" data-backdrop="static" data-keyboard="false">Add Victim</button>
+                                    <br />
+                                    <br />
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="submit-case1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                        <div class="modal-dialog modal-sm" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Action: Add Victim</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <label>Please click submit now to confirm action</label>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-danger">Submit Now</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </form>
                     <form action="{{ route('victim.add') }}" method="post" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <input type="hidden" name="case_id" value="{{ $case_id }}">
+                    <hr>
                     <div class="form-group">
+                        <h2>Specify the victim details here if its new</h2>
+                        <br />
                         <img src="{{ URL::asset('assets/img/default-user.jpg') }}" class="img-thumbnail" width="250" height="250" id="photoPreview"><br /><br />
                         <input type="file" name="photoFile" id="photoFile">
                         <br />
@@ -159,4 +215,12 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('more_scripts')
+    <script>
+        $(function() {
+
+        });
+    </script>
 @endsection

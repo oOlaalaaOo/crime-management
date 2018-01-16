@@ -124,16 +124,21 @@ class UserController extends Controller
    }
 
    public function add_view() {
+
+      $ranks = \App\Rank::all();
+
       return view('users.add-view')
                   ->with('active_menu', 'account')
-                  ->with('active_submenu', '');
+                  ->with('active_submenu', '')
+                  ->with('ranks', $ranks);
    }
 
    public function add(Request $request) {
       $validator = Validator::make($request->all(), [
          'name' => 'required',
          'username' => 'required|email|unique:users,username',
-         'password' => 'required|confirmed'
+         'password' => 'required|confirmed',
+         'user_rank_id' => 'required'
       ]);
 
       if ($validator->fails()) {
@@ -147,15 +152,54 @@ class UserController extends Controller
       $user->status = 'active';
       $user->user_type_id = 2;
       $user->police_station_id = 1;
+      $user->user_rank_id = $request->input('user_rank_id');
 
       if ($user->save()) {
          session()->flash('status', true);
-         return redirect()->route('users.all');
       }
 
       session()->flash('status', false);
 
       return redirect()->route('users.all');
       
+   }
+
+   public function show($user_id)
+   {
+      $user = \App\User::find($user_id);
+      $ranks = \App\Rank::all();
+      return view('users.show')
+               ->with('active_menu', 'users')
+               ->with('active_submenu', '')
+               ->with('user', $user)
+               ->with('ranks', $ranks);
+   }
+
+   public function update(Request $request)
+   {
+      $validator = Validator::make($request->all(), [
+         'name' => 'required',
+         'user_rank_id' => 'required'
+      ]);
+
+      if ($validator->fails())
+      {
+         return redirect()->back()->withErrors($validator)->withInput();
+      }
+
+      $user = \App\User::find($request->input('user_id'));
+      $user->name = $request->input('name');
+      $user->user_rank_id = $request->input('user_rank_id');
+      $user->status = $request->has('user_status') == true ? 'active' : 'inactive';
+      if ($user->save())
+      {
+         session()->flash('status', true);
+      }
+      else
+      {
+         session()->flash('status', false);
+      }
+
+      return redirect()->route('users.all');
    }
 }

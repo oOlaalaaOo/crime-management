@@ -27,10 +27,12 @@
                     <h2>Case List</h2>
                 </div>
                 <div class="ibox-content">
+                    <h3>Your Total Case: {{ $total_case }}</h3>
+                    <hr>
                     @if(count($user_cases) > 0)
                     @foreach($user_cases as $data)
                     <div class="list-group">
-                        <a href="#" class="list-group-item">
+                        <a href="{{ route('case.details', ['case_id' => $data->case_id]) }}" class="list-group-item">
                             <h4 class="list-group-item-heading">Case No: <span class="badge">{{ $data->case_no }}</span></h4>
                             <table class="table">
                                 <tbody>

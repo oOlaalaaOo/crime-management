@@ -23,6 +23,9 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
+                @if(session()->has('unknown_address'))
+                    <div class="alert alert-success" role="alert">{{ session()->get('unknown_address') }}</div>
+                @endif
                 <div class="ibox-title">
                     <h2>Case: <small>all fields with * is required</small></h2></div>
                     <div class="ibox-content">
@@ -48,14 +51,6 @@
                                             </select>
                                             @if($errors->has('crime_classification'))
                                             <span class="help-block">{{ $errors->first('crime_classification') }}</span>
-                                            @endif
-                                        </div>
-                                        
-                                        <div class="form-group @if($errors->has('home_address')) has-error @endif">
-                                            <label for="home_address">Address</label>
-                                            <input type="text" name="home_address" id="home_address" class="form-control" value="{{ old('home_address') }}">
-                                            @if($errors->has('home_address'))
-                                            <span class="help-block">{{ $errors->first('home_address') }}</span>
                                             @endif
                                         </div>
                                         
@@ -98,6 +93,14 @@
                                         </select>
                                         @if($errors->has('city_id'))
                                         <span class="help-block">{{ $errors->first('city_id') }}</span>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group @if($errors->has('home_address')) has-error @endif">
+                                        <label for="home_address">Address</label>
+                                        <input type="text" name="home_address" id="home_address" class="form-control" value="{{ old('home_address') }}">
+                                        @if($errors->has('home_address'))
+                                        <span class="help-block">{{ $errors->first('home_address') }}</span>
                                         @endif
                                     </div>
                                 </div>

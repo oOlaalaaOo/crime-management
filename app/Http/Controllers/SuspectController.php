@@ -56,11 +56,53 @@ class SuspectController extends Controller
                 ->with('name', $name);
     }
 
-    public function add_view($case_id) {
+    public function add_view($case_id) 
+    {
+        $old_suspects = [];
+
+        $cases = \App\Case_suspect::where('case_id', '=', $case_id)->get();
+
+        foreach ($cases as $case)
+        {
+            $old_suspects[] = $case->suspect_id;
+        }
+
+        $suspects = \App\Suspect::whereNotIn('suspect_id', $old_suspects)->get();
+
         return view('suspects.add-view')
                 ->with('active_menu', 'suspects')
                 ->with('active_submenu', '')
-                ->with('case_id', $case_id);
+                ->with('case_id', $case_id)
+                ->with('suspects', $suspects);
+    }
+
+    public function add_exist(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'suspect_id' => 'required',
+            'suspect_status' => 'required'
+        ]);
+
+        if ($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $case_suspect = new Case_suspect;
+        $case_suspect->case_id = $request->input('case_id');
+        $case_suspect->suspect_id = $request->input('suspect_id');
+        $case_suspect->suspect_status = $request->input('suspect_status');
+
+        if ($case_suspect->save())
+        {
+            session()->flash('status', true);
+        }
+        else
+        {
+            session()->flash('status', false);
+        }
+
+        return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
 
     public function add(Request $request) {

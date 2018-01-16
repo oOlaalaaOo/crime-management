@@ -48,6 +48,7 @@ Route::get('victim/all', 'VictimController@all')->name('victim.all');
 Route::get('victim/search', 'VictimController@search')->name('victim.search');
 Route::get('victim/add/{case_id}', 'VictimController@add_view')->name('victim.add.view');
 Route::post('victim/add', 'VictimController@add')->name('victim.add');
+Route::post('victim/add-exist', 'VictimController@add_exist')->name('victim.add.exist');
 Route::get('victim/update/{victim_id}/{case_id}', 'VictimController@update_view')->name('victim.update.view');
 Route::post('victim/update', 'VictimController@update')->name('victim.update');
 
@@ -55,6 +56,7 @@ Route::get('suspect/all', 'SuspectController@all')->name('suspect.all');
 Route::get('suspect/search', 'SuspectController@search')->name('suspect.search');
 Route::get('suspect/add/{case_id}', 'SuspectController@add_view')->name('suspect.add.view');
 Route::post('suspect/add', 'SuspectController@add')->name('suspect.add');
+Route::post('suspect/add-exist', 'SuspectController@add_exist')->name('suspect.add.exist');
 Route::get('suspect/update/{suspect_id}/{case_id}', 'SuspectController@update_view')->name('suspect.update.view');
 Route::post('suspect/update', 'SuspectController@update')->name('suspect.update');
 
@@ -64,6 +66,8 @@ Route::post('user/update/profile/password', 'UserController@update_profile_passw
 Route::get('users/all', 'UserController@all')->name('users.all');
 Route::get('users/add', 'UserController@add_view')->name('users.add.view');
 Route::post('users/add', 'UserController@add')->name('users.add');
+Route::get('users/show/{user_id}', 'UserController@show')->name('users.show');
+Route::post('users/update', 'UserController@update')->name('users.update');
 
 Route::get('crime/type/all', 'CrimeTypeController@all')->name('crime.type.all');
 Route::get('crime/type/add', 'CrimeTypeController@add_view')->name('crime.type.add.view');
@@ -86,4 +90,12 @@ Route::get('crime/classification/update/{crime_classification_id}', 'CrimeClassi
 Route::post('crime/classification/update', 'CrimeClassificationController@update')->name('crime.classification.update');
 Route::post('crime/classification/delete', 'CrimeClassificationController@delete')->name('crime.classification.delete');
 
+Route::get('rank/all', 'RankController@all')->name('rank.all');
+Route::get('rank/show/{rank_id}', 'RankController@show')->name('rank.show');
+Route::get('rank/add', 'RankController@add_view')->name('rank.add.view');
+Route::post('rank/add', 'RankController@add')->name('rank.add');
+Route::post('rank/update', 'RankController@update')->name('rank.update');
+
 Route::get('reports', 'ReportController@index')->name('reports');
+
+// Route::get('test', 'TestController@index')->name('test');

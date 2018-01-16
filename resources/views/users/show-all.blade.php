@@ -49,7 +49,7 @@
                                 <td><strong>{{ $completed_user_cases }}</strong></td>
                                 <td>{{ $ongoing_user_cases }}</td>
                                 <td>N/A</td>
-                                <td><a href="#" class="btn btn-xs btn-default"><i class="fa fa-mail-forward"></i></a></td>
+                                <td><a href="{{ route('users.show', ['user_id' => $user->user_id]) }}" class="btn btn-xs btn-default"><i class="fa fa-mail-forward"></i></a></td>
                             </tr>
                             @endforeach
                         </tbody>

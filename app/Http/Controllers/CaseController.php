@@ -18,6 +18,7 @@ use App\Case_suspect;
 use App\Offense;
 use App\User_case;
 use App\Case_folder;
+use App\CrimeCoordinate;
 
 use DB;
 use Validator;
@@ -66,49 +67,84 @@ class CaseController extends Controller
     		return redirect()->route('case.add.view')->withErrors($validator)->withInput();
     	}
 
-    	$crime_location = new Crime_location;
-    	$crime_location->region_id = $request->input('region_id');
-    	$crime_location->province_id = $request->input('province_id');
-    	$crime_location->city_id = $request->input('city_id');
-    	$crime_location->home_address = $request->input('home_address');
-    	$crime_location->save();
+        $province = DB::table('refprovince')->where('provCode', $request->input('province_id'))->first();
+        $city = DB::table('refcitymun')->where('citymunCode', $request->input('city_id'))->first();
 
-    	$offense = new Offense;
-    	$offense->crime_category_id = $request->input('crime_category');
-    	$offense->detail = $request->input('offense_detail');
-    	$offense->save();
+        $url = 'https://maps.googleapis.com/maps/api/geocode/json?';
+        $data = [
+            'address' => $province->provDesc . ', ' . $city->citymunDesc . ', ' . $request->input('home_address'),
+            'key'   => 'AIzaSyA4g5tTbLP8pq1P6W0VtAc7TY8bMcc3Mm0'
+        ];
+        $params = http_build_query($data);
+        $main_url = $url . $params;
 
-    	$case_detail = new Case_detail;
-    	$case_detail->offense_id = $offense->offense_id;
-    	$case_detail->crime_location_id = $crime_location->crime_location_id;
-    	$case_detail->crime_classification_id = $request->input('crime_classification');
-    	$case_detail->incident_at = $request->input('incident_at');
-    	$case_detail->save();
+        $ch = curl_init(); 
+        curl_setopt($ch, CURLOPT_URL, $main_url); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+        curl_setopt($ch,CURLOPT_HEADER, false); 
+        $result = curl_exec($ch); 
+        curl_close($ch);
+        $result = json_decode($result, true);
+      
+        if ($result['status'] == 'OK')
+        {
+            $lat = $result['results'][0]['geometry']['location']['lat'];
+            $long = $result['results'][0]['geometry']['location']['lng'];
 
-    	$case_blotter = new Case_blotter;
-    	$case_blotter->entry_no = $request->input('entry_no');
-    	$case_blotter->reported_at = $request->input('reported_at');
-    	$case_blotter->save();
+            $crime_location = new Crime_location;
+            $crime_location->region_id = $request->input('region_id');
+            $crime_location->province_id = $request->input('province_id');
+            $crime_location->city_id = $request->input('city_id');
+            $crime_location->home_address = $request->input('home_address');
+            $crime_location->save();
 
-    	$case = new Casse;
-    	$case->case_unique_no = uniqid();
-    	$case->case_blotter_id = $case_blotter->case_blotter_id;
-    	$case->case_detail_id = $case_detail->case_detail_id;
-        $case->case_status = 'ongoing';
+            $offense = new Offense;
+            $offense->crime_category_id = $request->input('crime_category');
+            $offense->detail = $request->input('offense_detail');
+            $offense->save();
 
-    	if ($case->save()) {
+            $case_detail = new Case_detail;
+            $case_detail->offense_id = $offense->offense_id;
+            $case_detail->crime_location_id = $crime_location->crime_location_id;
+            $case_detail->crime_classification_id = $request->input('crime_classification');
+            $case_detail->incident_at = $request->input('incident_at');
+            $case_detail->save();
 
-    		$user_case = new User_case;
-    		$user_case->user_id = Auth::user()->user_id;
-    		$user_case->case_id = $case->case_id;
-    		$user_case->save();
+            $crime_coordinate = new CrimeCoordinate;
+            $crime_coordinate->crime_coordinate_lat = $lat;
+            $crime_coordinate->crime_coordinate_long = $long;
+            $crime_coordinate->case_detail_id = $case_detail->case_detail_id;
+            $crime_coordinate->save();
 
-    		session()->flash('status', true);
-    		return redirect()->route('home');
-    	} 
+            $case_blotter = new Case_blotter;
+            $case_blotter->entry_no = $request->input('entry_no');
+            $case_blotter->reported_at = $request->input('reported_at');
+            $case_blotter->save();
 
-    	session()->flash('status', false);
-    	return redirect()->route('home');
+            $case = new Casse;
+            $case->case_unique_no = uniqid();
+            $case->case_blotter_id = $case_blotter->case_blotter_id;
+            $case->case_detail_id = $case_detail->case_detail_id;
+            $case->case_status = 'ongoing';
+            
+            if ($case->save()) {
+
+                $user_case = new User_case;
+                $user_case->user_id = Auth::user()->user_id;
+                $user_case->case_id = $case->case_id;
+                $user_case->save();
+
+                session()->flash('status', true);
+                return redirect()->route('home');
+            } 
+
+            session()->flash('status', false);
+            return redirect()->route('home');
+        }
+
+        session()->flash('unknown_address', 'The Address you specified is unknown');
+        return redirect()->back();
+        
 
     }
 
@@ -245,7 +281,7 @@ class CaseController extends Controller
         if ($case->save()) {
 
             session()->flash('status', true);
-            return redirect()->route('case.show', ['case_id' => $request->input('case_id')]);
+            return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
         } 
 
         session()->flash('status', false);
@@ -254,7 +290,7 @@ class CaseController extends Controller
 
     public function details($case_id) {
         $case = DB::table('user_cases')
-                    ->select('cases.case_id', 'cases.case_unique_no', 'cases.case_status', 'case_blotters.entry_no', 'case_blotters.reported_at', 'crime_categories.crime_category_name', 'crime_classifications.crime_classification_name', 'crime_types.crime_type_name', 'offenses.detail', 'refregion.regDesc', 'refcitymun.citymunDesc', 'refprovince.provDesc', 'case_details.incident_at', 'crime_locations.home_address')
+                    ->select('cases.case_id', 'cases.case_unique_no', 'cases.case_status', 'case_blotters.entry_no', 'case_blotters.reported_at', 'crime_categories.crime_category_name', 'crime_classifications.crime_classification_name', 'crime_types.crime_type_name', 'offenses.detail', 'refregion.regDesc', 'refcitymun.citymunDesc', 'refprovince.provDesc', 'case_details.incident_at', 'crime_locations.home_address', 'crime_coordinates.crime_coordinate_lat', 'crime_coordinates.crime_coordinate_long')
                     ->leftJoin('cases', 'user_cases.case_id', '=', 'cases.case_id')
                     ->leftJoin('case_details', 'cases.case_detail_id', '=', 'case_details.case_detail_id')
                     ->leftJoin('offenses', 'case_details.offense_id', '=', 'offenses.offense_id')
@@ -266,6 +302,7 @@ class CaseController extends Controller
                     ->leftJoin('refprovince', 'crime_locations.province_id', '=', 'refprovince.provCode')
                     ->leftJoin('refcitymun', 'crime_locations.city_id', '=', 'refcitymun.citymunCode')
                     ->leftJoin('case_blotters', 'cases.case_blotter_id', '=', 'case_blotters.case_blotter_id')
+                    ->leftJoin('crime_coordinates', 'case_details.case_detail_id', '=', 'crime_coordinates.case_detail_id')
                     ->where('user_cases.user_id', '=', Auth::user()->user_id)
                     ->where('cases.case_id', '=', $case_id)
                     ->first();
