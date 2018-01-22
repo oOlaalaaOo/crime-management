@@ -50,6 +50,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Case No.</th>
                                 <th>Name</th>
                                 <th>Gender</th>
                                 <th>Nationality</th>
@@ -61,6 +62,7 @@
                             @foreach($victims as $data)
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
+                                <td>{{ $data->case_unique_no }}</td>
                                 <td>{{ $data->first_name . ' ' . $data->mid_name . ' ' . $data->last_name }}</td>
                                 <td>{{ ucfirst($data->gender) }}</td>
                                 <td>{{ ucfirst($data->nationality) }}</td>

@@ -122,7 +122,7 @@ class CaseController extends Controller
             $case_blotter->save();
 
             $case = new Casse;
-            $case->case_unique_no = uniqid();
+            $case->case_unique_no = date('Y') . date('m') . date('d').'-'.$case_detail->case_detail_id;
             $case->case_blotter_id = $case_blotter->case_blotter_id;
             $case->case_detail_id = $case_detail->case_detail_id;
             $case->case_status = 'ongoing';
@@ -191,7 +191,7 @@ class CaseController extends Controller
                             ->where('cases.case_unique_no', 'like', '%'.$case_no.'%')
                             ->get();
 
-        return view('cases.case-all')
+        return view('cases.show-all')
                 ->with('active_menu', 'case')
                 ->with('active_submenu', '')
                 ->with('cases', $cases)

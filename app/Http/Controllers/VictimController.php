@@ -22,6 +22,7 @@ class VictimController extends Controller
         
     	$victims = DB::table('case_victims')                         
                             ->leftJoin('victims', 'case_victims.victim_id', '=', 'victims.victim_id')
+                            ->leftJoin('cases', 'cases.case_id', '=', 'case_victims.case_id')
                             ->get();
 
         return view('victims')
@@ -249,6 +250,6 @@ class VictimController extends Controller
         }
 
         session()->flash('status', true);
-        return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
+        return redirect()->route('victim.update.view', ['victim_id' => $victim->victim_id, 'case_id' => $request->input('case_id')]);
     }
 }

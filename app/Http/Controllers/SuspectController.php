@@ -21,6 +21,7 @@ class SuspectController extends Controller
     public function all() {
     	$suspects = DB::table('case_suspects')                         
                             ->leftJoin('suspects', 'case_suspects.suspect_id', '=', 'suspects.suspect_id')
+                            ->leftJoin('cases', 'cases.case_id', '=', 'case_suspects.case_id')
                             ->paginate(5);
 
         return view('suspects')
@@ -242,6 +243,6 @@ class SuspectController extends Controller
         }
 
         session()->flash('status', true);
-        return redirect()->route('case.details', ['suspect_id' => $suspect->suspect_id, 'case_id' => $request->input('case_id')]);
+        return redirect()->route('suspect.update.view', ['suspect_id' => $suspect->suspect_id, 'case_id' => $request->input('case_id')]);
     }
 }

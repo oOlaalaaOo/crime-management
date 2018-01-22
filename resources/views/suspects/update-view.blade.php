@@ -35,9 +35,9 @@
                         <input type="hidden" name="suspect_id" value="{{ $suspect_id }}">
                         <input type="hidden" name="case_suspect_id" value="{{ $case_suspect_id }}">
                         <input type="hidden" name="case_id" value="{{ $case_id }}">
-                        <input type="hidden" name="suspect_file_id" value="{{ $file->suspect_file_id }}">
+                        <input type="hidden" name="suspect_file_id" value="@if(isset($file->suspect_file_id)) {{ $file->suspect_file_id }} @endif">
                     <div class="form-group">
-                        @if($file->sf_filepath != null)
+                        @if(isset($file->sf_filepath))
                         
                         <img src="{{ URL::asset('suspect-files/'.$suspect_id.'/'.$file->sf_filepath) }}" class="img-thumbnail" width="300" height="300" id="photoPreview">
                         @else
