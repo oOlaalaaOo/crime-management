@@ -64,4 +64,19 @@ class HomeController extends Controller
                 ->with('total_case', $total_case);
     }
 
+    public function case_per_year(Request $request)
+    {
+        $years = DB::table('cases')
+                        ->selectRaw('DISTINCT(YEAR(created_at)) as years')
+                        ->get();
+        
+        $result = [];
+
+        foreach ($years as $year)
+        {
+            $result[$year][] = DB::table('cases')->where(DB::raw('YEAR(created_at)'), '=', $year)->count();
+        }
+
+        return $result;
+    }
 }

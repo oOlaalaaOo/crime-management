@@ -18,17 +18,31 @@ class VictimController extends Controller
 
     }
 
-    public function all() {
-        
-    	$victims = DB::table('case_victims')                         
-                            ->leftJoin('victims', 'case_victims.victim_id', '=', 'victims.victim_id')
-                            ->leftJoin('cases', 'cases.case_id', '=', 'case_victims.case_id')
+    public function all() 
+    {
+        $case_victims = DB::table('case_victims')
+                            ->selectRaw('DISTINCT(victim_id)')
                             ->get();
+        $cvs = [];
+
+        foreach ($case_victims as $cv)
+        {
+            $cvs[] = $cv->victim_id;
+        }
+
+        $victims = DB::table('victims')                         
+                        ->whereIn('victim_id', $cvs)
+                        ->get();
 
         return view('victims')
                 ->with('active_menu', 'victims')
                 ->with('active_submenu', '')
                 ->with('victims', $victims);
+    }
+
+    public function show()
+    {
+
     }
 
     public function search(Request $request) {
@@ -173,12 +187,12 @@ class VictimController extends Controller
         return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
 
-    public function update_view($victim_id, $case_id) {
+    public function update_view($victim_id) {
+
         $victim = DB::table('victims')
-                        ->leftJoin('case_victims', 'victims.victim_id', '=', 'case_victims.victim_id')
-                        ->where('victims.victim_id', '=', $victim_id)
-                        ->where('case_victims.case_id', '=', $case_id)
+                        ->where('victim_id', '=', $victim_id)
                         ->first();
+
         $file = DB::table('victim_files')
                         ->where('victim_id', '=', $victim_id)
                         ->first();
@@ -187,13 +201,12 @@ class VictimController extends Controller
                 ->with('active_menu', 'victims')
                 ->with('active_submenu', '')
                 ->with('victim_id', $victim_id)
-                ->with('case_victim_id', $victim->case_victim_id)
                 ->with('victim', $victim)
-                ->with('case_id', $case_id)
                 ->with('file', $file);
     }
 
-    public function update(Request $request) {
+    public function update(Request $request) 
+    {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
             'mid_name' => 'required',
@@ -202,7 +215,6 @@ class VictimController extends Controller
             'victim_occupation' => 'required',
             'victim_birth_date' => 'required|date_format:"Y-m-d"',
             'victim_nationality' => 'required',
-            'victim_status' => 'required',
             'victim_gender' => 'required',
             'victim_civil_status' => 'required'
         ]);
@@ -222,34 +234,46 @@ class VictimController extends Controller
         $victim->civil_status = $request->input('victim_civil_status');
         $victim->nationality = $request->input('victim_nationality');
 
-        $victim->save();
+        if ($victim->save())
+        {
+            if ($request->hasFile('photoFile')) {
+                $dir = $victim->victim_id;
 
-        $case_victim = Case_victim::find($request->input('case_victim_id'));
-        $case_victim->victim_status = $request->input('victim_status');
-        $case_victim->save();
+                if (is_dir($dir) === false)
+                {
+                    File::makeDirectory(public_path('victim-files/'.$dir), $mode = 0777, true, true);
+                }
 
-        if ($request->hasFile('photoFile')) {
-            $dir = $victim->victim_id;
+                $image = $request->file('photoFile');
+                $filename  = time() . '.' . $image->getClientOriginalExtension();
+                $path = public_path('victim-files/' . $dir . '/' . $filename);
 
-            if (is_dir($dir) === false)
-            {
-                File::makeDirectory(public_path('victim-files/'.$dir), $mode = 0777, true, true);
+                Image::make($image->getRealPath())->resize(300, 300)->save($path);
+
+                $count_file = Victim_file::where('victim_file_id', '=', $request->input('victim_file_id'))->count();
+
+                if ($count_file > 0)
+                {
+                    $victim_file = Victim_file::find($request->input('victim_file_id'));
+                    $victim_file->vf_filepath = $filename;
+                    $victim_file->victim_id = $victim->victim_id;
+
+                    $victim_file->save();
+                }
+                else
+                {
+                    $victim_file = new Victim_file;
+                    $victim_file->vf_filepath = $filename;
+                    $victim_file->victim_id = $victim->victim_id;
+
+                    $victim_file->save();
+                }
             }
 
-            $image = $request->file('photoFile');
-            $filename  = time() . '.' . $image->getClientOriginalExtension();
-            $path = public_path('victim-files/' . $dir . '/' . $filename);
-
-            Image::make($image->getRealPath())->resize(300, 300)->save($path);
-
-            $victim_file = Victim_file::find($request->input('victim_file_id'));
-            $victim_file->vf_filepath = $filename;
-            $victim_file->victim_id = $victim->victim_id;
-
-            $victim_file->save();
+            session()->flash('status', true);
+            return redirect()->route('victim.update.view', ['victim_id' => $victim->victim_id]);
         }
 
-        session()->flash('status', true);
-        return redirect()->route('victim.update.view', ['victim_id' => $victim->victim_id, 'case_id' => $request->input('case_id')]);
+        
     }
 }

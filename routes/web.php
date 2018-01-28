@@ -49,7 +49,7 @@ Route::get('victim/search', 'VictimController@search')->name('victim.search');
 Route::get('victim/add/{case_id}', 'VictimController@add_view')->name('victim.add.view');
 Route::post('victim/add', 'VictimController@add')->name('victim.add');
 Route::post('victim/add-exist', 'VictimController@add_exist')->name('victim.add.exist');
-Route::get('victim/update/{victim_id}/{case_id}', 'VictimController@update_view')->name('victim.update.view');
+Route::get('victim/update/{victim_id}', 'VictimController@update_view')->name('victim.update.view');
 Route::post('victim/update', 'VictimController@update')->name('victim.update');
 
 Route::get('suspect/all', 'SuspectController@all')->name('suspect.all');
@@ -57,7 +57,7 @@ Route::get('suspect/search', 'SuspectController@search')->name('suspect.search')
 Route::get('suspect/add/{case_id}', 'SuspectController@add_view')->name('suspect.add.view');
 Route::post('suspect/add', 'SuspectController@add')->name('suspect.add');
 Route::post('suspect/add-exist', 'SuspectController@add_exist')->name('suspect.add.exist');
-Route::get('suspect/update/{suspect_id}/{case_id}', 'SuspectController@update_view')->name('suspect.update.view');
+Route::get('suspect/update/{suspect_id}', 'SuspectController@update_view')->name('suspect.update.view');
 Route::post('suspect/update', 'SuspectController@update')->name('suspect.update');
 
 Route::get('user/profile', 'UserController@profile')->name('user.profile');
@@ -98,4 +98,4 @@ Route::post('rank/update', 'RankController@update')->name('rank.update');
 
 Route::get('reports', 'ReportController@index')->name('reports');
 
-// Route::get('test', 'TestController@index')->name('test');
+Route::get('/chart/case-per-year', 'HomeController@case_per_year')->name('chart.case-per-year');

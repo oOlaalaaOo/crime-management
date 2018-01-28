@@ -33,8 +33,6 @@
                     <form action="{{ route('suspect.update') }}" method="post" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <input type="hidden" name="suspect_id" value="{{ $suspect_id }}">
-                        <input type="hidden" name="case_suspect_id" value="{{ $case_suspect_id }}">
-                        <input type="hidden" name="case_id" value="{{ $case_id }}">
                         <input type="hidden" name="suspect_file_id" value="@if(isset($file->suspect_file_id)) {{ $file->suspect_file_id }} @endif">
                     <div class="form-group">
                         @if(isset($file->sf_filepath))
@@ -134,33 +132,27 @@
                         <span class="help-block">{{ $errors->first('nationality') }}</span>
                         @endif
                     </div>
-                    <div class="form-group @if($errors->has('status')) has-error @endif">
-                        <label for="status">Status: </label>
-                        <input type="text" id="status" name="status" class="form-control" value="{{ old('status', $suspect->suspect_status) }}">
-                        @if($errors->has('status'))
-                        <span class="help-block">{{ $errors->first('status') }}</span>
-                        @endif
-                    </div>
+
                     <div class="form-group">
                         <button type="button" data-toggle="modal" data-target="#submit-case" class="btn btn-success btn-lg" data-backdrop="static" data-keyboard="false">Add New Suspect</button>
-                                    <br />
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="submit-case" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                        <div class="modal-dialog modal-sm" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <label>Please click submit now to confirm adding new case</label>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary">Submit Now</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                        <br />
+                        <!-- Modal -->
+                        <div class="modal fade" id="submit-case" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog modal-sm" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
                                     </div>
+                                    <div class="modal-body">
+                                        <label>Please click submit now to confirm adding new case</label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Submit Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     </form>
                 </div>

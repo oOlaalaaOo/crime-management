@@ -33,8 +33,6 @@
                     <form action="{{ route('victim.update') }}" method="post" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <input type="hidden" name="victim_id" value="{{ $victim_id }}">
-                        <input type="hidden" name="case_victim_id" value="{{ $case_victim_id }}">
-                        <input type="hidden" name="case_id" value="{{ $case_id }}">
                         <input type="hidden" name="victim_file_id" value="{{ $file->victim_file_id }}">
                     <div class="form-group">
                         @if($file->vf_filepath != null)
@@ -134,13 +132,7 @@
                         <span class="help-block">{{ $errors->first('victim_nationality') }}</span>
                         @endif
                     </div>
-                    <div class="form-group @if($errors->has('victim_status')) has-error @endif">
-                        <label for="victim_status">Status: </label>
-                        <input type="text" id="victim_status" name="victim_status" class="form-control" value="{{ old('victim_status', $victim->victim_status) }}">
-                        @if($errors->has('victim_status'))
-                        <span class="help-block">{{ $errors->first('victim_status') }}</span>
-                        @endif
-                    </div>
+
                     <div class="form-group">
                         <button type="button" data-toggle="modal" data-target="#submit-case" class="btn btn-success btn-lg" data-backdrop="static" data-keyboard="false">Update Victim Details</button>
                                     <br />

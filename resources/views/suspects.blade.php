@@ -50,7 +50,6 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Case No.</th>
                                 <th>Name</th>
                                 <th>Gender</th>
                                 <th>Nationality</th>
@@ -62,18 +61,17 @@
                             @foreach($suspects as $data)
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
-                                <td>{{ $data->case_unique_no }}</td>
                                 <td>{{ $data->first_name . ' ' . $data->mid_name . ' ' . $data->last_name }}</td>
                                 <td>{{ ucfirst($data->gender) }}</td>
                                 <td>{{ ucfirst($data->nationality) }}</td>
                                 <td>{{ date('F d, Y', strtotime($data->birth_date)) }}</td>
-                                <td><a href="{{ route('suspect.update.view', ['suspect_id' => $data->suspect_id, 'case_id' => $data->case_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-pencil"></i> Update</a></td>
+                                <td><a href="{{ route('suspect.update.view', ['suspect_id' => $data->suspect_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-pencil"></i> Update</a></td>
                             </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="6">
+                                <td colspan="7">
                                     <ul class="pagination pull-right"></ul>
                                 </td>
                             </tr>

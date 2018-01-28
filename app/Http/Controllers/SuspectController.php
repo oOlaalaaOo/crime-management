@@ -19,10 +19,19 @@ class SuspectController extends Controller
     }
 
     public function all() {
-    	$suspects = DB::table('case_suspects')                         
-                            ->leftJoin('suspects', 'case_suspects.suspect_id', '=', 'suspects.suspect_id')
-                            ->leftJoin('cases', 'cases.case_id', '=', 'case_suspects.case_id')
-                            ->paginate(5);
+    	$case_suspects = DB::table('case_suspects')
+                            ->selectRaw('DISTINCT(suspect_id)')
+                            ->get();
+        $css = [];
+
+        foreach ($case_suspects as $cs)
+        {
+            $css[] = $cs->suspect_id;
+        }
+
+        $suspects = DB::table('suspects')                         
+                        ->whereIn('suspect_id', $css)
+                        ->paginate(10);
 
         return view('suspects')
                 ->with('active_menu', 'suspects')
@@ -166,12 +175,12 @@ class SuspectController extends Controller
         return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
 
-    public function update_view($suspect_id, $case_id) {
+    public function update_view($suspect_id) 
+    {
         $suspect = DB::table('suspects')
-                        ->leftJoin('case_suspects', 'suspects.suspect_id', '=', 'case_suspects.suspect_id')
-                        ->where('suspects.suspect_id', '=', $suspect_id)
-                        ->where('case_suspects.case_id', '=', $case_id)
+                        ->where('suspect_id', '=', $suspect_id)
                         ->first();
+
         $file = DB::table('suspect_files')
                         ->where('suspect_id', '=', $suspect_id)
                         ->first();
@@ -180,9 +189,7 @@ class SuspectController extends Controller
                 ->with('active_menu', 'suspects')
                 ->with('active_submenu', '')
                 ->with('suspect_id', $suspect_id)
-                ->with('case_suspect_id', $suspect->case_suspect_id)
                 ->with('suspect', $suspect)
-                ->with('case_id', $case_id)
                 ->with('file', $file);
     }
 
@@ -195,7 +202,6 @@ class SuspectController extends Controller
             'occupation' => 'required',
             'birth_date' => 'required|date_format:"Y-m-d"',
             'nationality' => 'required',
-            'status' => 'required',
             'gender' => 'required',
             'civil_status' => 'required'
         ]);
@@ -215,34 +221,45 @@ class SuspectController extends Controller
         $suspect->civil_status = $request->input('civil_status');
         $suspect->nationality = $request->input('nationality');
 
-        $suspect->save();
+        if ($suspect->save())
+        {
+            if ($request->hasFile('photoFile')) {
+                $dir = $suspect->suspect_id;
 
-        $case_suspect = Case_suspect::find($request->input('case_suspect_id'));
-        $case_suspect->suspect_status = $request->input('status');
-        $case_suspect->save();
+                if (is_dir($dir) === false)
+                {
+                    File::makeDirectory(public_path('suspect-files/'.$dir), $mode = 0777, true, true);
+                }
 
-        if ($request->hasFile('photoFile')) {
-            $dir = $suspect->suspect_id;
+                $image = $request->file('photoFile');
+                $filename  = time() . '.' . $image->getClientOriginalExtension();
+                $path = public_path('suspect-files/' . $dir . '/' . $filename);
 
-            if (is_dir($dir) === false)
-            {
-                File::makeDirectory(public_path('suspect-files/'.$dir), $mode = 0777, true, true);
+                Image::make($image->getRealPath())->resize(300, 300)->save($path);
+
+                $count_file = Suspect_file::where('suspect_file_id', '=', $request->input('suspect_file_id'))->count();
+
+                if ($count_file > 0)
+                {
+                    $suspect_file = Suspect_file::find($request->input('suspect_file_id'));
+                    $suspect_file->sf_filepath = $filename;
+                    $suspect_file->suspect_id = $suspect->suspect_id;
+
+                    $suspect_file->save();
+                }
+                else
+                {
+                    $suspect_file = new Suspect_file;
+                    $suspect_file->sf_filepath = $filename;
+                    $suspect_file->suspect_id = $suspect->suspect_id;
+
+                    $suspect_file->save();
+                }
+                
             }
 
-            $image = $request->file('photoFile');
-            $filename  = time() . '.' . $image->getClientOriginalExtension();
-            $path = public_path('suspect-files/' . $dir . '/' . $filename);
-
-            Image::make($image->getRealPath())->resize(300, 300)->save($path);
-
-            $suspect_file = Suspect_file::find($request->input('suspect_file_id'));
-            $suspect_file->sf_filepath = $filename;
-            $suspect_file->suspect_id = $suspect->suspect_id;
-
-            $suspect_file->save();
+            session()->flash('status', true);
+            return redirect()->route('suspect.update.view', ['suspect_id' => $suspect->suspect_id]);
         }
-
-        session()->flash('status', true);
-        return redirect()->route('suspect.update.view', ['suspect_id' => $suspect->suspect_id, 'case_id' => $request->input('case_id')]);
     }
 }

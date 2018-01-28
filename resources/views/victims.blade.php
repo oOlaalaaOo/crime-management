@@ -61,19 +61,21 @@
                         <tbody>
                             @foreach($victims as $data)
                             <tr>
-                                <td>{{ $loop->index + 1 }}</td>
-                                <td>{{ $data->case_unique_no }}</td>
+                                <td></td>
                                 <td>{{ $data->first_name . ' ' . $data->mid_name . ' ' . $data->last_name }}</td>
                                 <td>{{ ucfirst($data->gender) }}</td>
                                 <td>{{ ucfirst($data->nationality) }}</td>
                                 <td>{{ date('F d, Y', strtotime($data->birth_date)) }}</td>
-                                <td><a href="{{ route('victim.update.view', ['victim_id' => $data->victim_id, 'case_id' => $data->case_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-pencil"></i> Update</a></td>
+                                <td>
+                                    <a href="{{ route('victim.update.view', ['victim_id' => $data->victim_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-pencil"></i> Update</a>
+                                    <a href="{{ route('victim.update.view', ['victim_id' => $data->victim_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-pencil"></i> Show</a>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="6">
+                                <td colspan="7">
                                     <ul class="pagination pull-right">
                                 </td>
                             </tr>

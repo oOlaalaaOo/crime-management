@@ -49,3 +49,18 @@ Member:
 	- Victims
 	- Suspects
 	- Reports
+
+
+
+-----------------------------------------------------------------------------
+to be added features:
+-steps for adding case
+-isa ka case pede daghan case detail(crime classification)
+-add another user(city director)
+--view case
+--generate report (statistical or not) with print
+
+-ilahi ang case blotter
+-remove daashboard words
+-maassign ang officer sa police station
+-ang sa admin walaon ang add case

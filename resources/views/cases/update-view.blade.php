@@ -23,6 +23,9 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
+                @if(session()->has('unknown_address'))
+                    <div class="alert alert-success" role="alert">{{ session()->get('unknown_address') }}</div>
+                @endif
                 <div class="ibox-title">
                     <h2>Case: <small>all fields with * is required</small></h2></div>
                     <div class="ibox-content">
@@ -34,6 +37,7 @@
                             <input type="hidden" name="case_blotter_id" value="{{ $case->case_blotter_id }}">
                             <input type="hidden" name="case_status" value="{{ $case->case_status }}">
                             <input type="hidden" name="case_id" value="{{ $case->case_id }}">
+                            <input type="hidden" name="crime_coordinate_id" value="{{ $case->crime_coordinate_id }}">
                             <div id="adding-case">
                                 
                             <div class="row" id="step-2">

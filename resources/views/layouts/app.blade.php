@@ -146,6 +146,9 @@
     <script src="{{ asset('inspinia/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+    <!-- Morris -->
+    <script src="{{ asset('inspinia/js/plugins/morris/raphael-2.1.0.min.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/morris/morris.js') }}"></script>
     <script src="{{ asset('inspinia/js/inspinia.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/footable/footable.all.min.js') }}"></script>

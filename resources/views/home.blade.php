@@ -86,7 +86,69 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Bar Chart Example </h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">Config option 1</a>
+                                </li>
+                                <li><a href="#">Config option 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="morris-bar-chart"></div>
+                    </div>
+                </div>
+            </div>
     </div>
 </div>
 
+@endsection
+@section('more_scripts')
+    <script type="text/javascript">
+        $(function() {
+            
+            $.ajax({
+                url: '',
+                method: 'get',
+                data: '',
+                success: function(resp) {
+
+                }
+            })
+
+            Morris.Bar({
+            element: 'morris-bar-chart',
+            data: [
+                { y: '2006', a: 60 },
+                { y: '2007', a: 75 },
+                { y: '2008', a: 50 },
+                { y: '2009', a: 75 },
+                { y: '2010', a: 50 },
+                { y: '2011', a: 75 },
+                { y: '2012', a: 100 } 
+            ],
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['Series A'],
+            hideHover: 'auto',
+            resize: true,
+            barColors: ['#1ab394'],
+        });
+        });
+    </script>
 @endsection
