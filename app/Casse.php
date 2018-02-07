@@ -9,7 +9,7 @@ class Casse extends Model
     protected $table = 'cases';
     protected $primaryKey = 'case_id';
     protected $fillable = [
-    	'case_victim_id', 'case_suspect_id', 'case_detail_id', 'case_blotter_id', 'case_status'
+    	'case_unique_no', 'case_status'
     ];
 
  	public function victim() {

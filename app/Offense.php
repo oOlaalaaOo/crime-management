@@ -9,6 +9,6 @@ class Offense extends Model
     protected $table = 'offenses';
     protected $primaryKey = 'offense_id';
     protected $fillable = [
-    	'crime_category_id', 'detail'
+    	'crime_category_id', 'offense_name', 'offense_description'
     ];
 }

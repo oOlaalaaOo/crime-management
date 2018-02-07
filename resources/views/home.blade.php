@@ -15,57 +15,15 @@
     </div>
     <div class="col-sm-8">
         <div class="title-action">
+            @if(Auth::check() && Auth::user()->user_type_id == 2)
             <a class="btn btn-warning" href="{{ route('case.add.view') }}"><i class="fa fa-plus"></i> Add Case</a>
+            @endif
         </div>
     </div>
 </div>
 <div class="wrapper wrapper-content">
     <div class="row">
-        <div class="col-xs-8">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h2>Case List</h2>
-                </div>
-                <div class="ibox-content">
-                    <h3>Your Total Case: {{ $total_case }}</h3>
-                    <hr>
-                    @if(count($user_cases) > 0)
-                    @foreach($user_cases as $data)
-                    <div class="list-group">
-                        <a href="{{ route('case.details', ['case_id' => $data->case_id]) }}" class="list-group-item">
-                            <h4 class="list-group-item-heading">Case No: <span class="badge">{{ $data->case_no }}</span></h4>
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>Crime Type:</td>
-                                        <td><strong>{{ $data->crime_type }}</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Crime Category:</td>
-                                        <td><strong>{{ $data->crime_category }}</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Crime Classification:</td>
-                                        <td><strong>{{ $data->crime_classification }}</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Incident Date:</td>
-                                        <td><strong>{{ date('F d, Y', strtotime($data->incident_at)) }}</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </a>
-                    </div>
-                    @endforeach
-                    <div class="text-right"> 
-                        {{ $user_cases->links() }}
-                    </div>
-                    @else
-                    <h3>You don't have case yet..</h3>
-                    @endif
-                </div>
-            </div>
-        </div>
+       
         <div class="col-xs-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -87,7 +45,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12">
+        <div class="col-sm-8">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>Bar Chart Example </h5>

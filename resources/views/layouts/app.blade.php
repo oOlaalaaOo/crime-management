@@ -56,6 +56,7 @@
                                 <li @if($active_submenu == 'crime_type') class="active" @endif><a href="{{ route('crime.type.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Crime Types</span></a></li>
                                 <li @if($active_submenu == 'crime_category') class="active" @endif><a href="{{ route('crime.category.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Crime Categories</span></a></li>
                                 <li @if($active_submenu == 'crime_classification') class="active" @endif><a href="{{ route('crime.classification.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Crime Classifications</span></a></li>
+                                <li @if($active_submenu == 'offense') class="active" @endif><a href="{{ route('crime.offense.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Offenses</span></a></li>
                             </ul>
                         </li>
 

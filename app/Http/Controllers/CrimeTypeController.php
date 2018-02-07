@@ -29,8 +29,8 @@ class CrimeTypeController extends Controller
     public function add_view()
     {
     	return view('crime.type.add-view')
-    			->with('active_menu', 'dashboard')
-                ->with('active_submenu', '');
+    			->with('active_menu', 'crimes')
+                ->with('active_submenu', 'crime_type');
     }
 
     public function add(Request $request)

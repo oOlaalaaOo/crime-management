@@ -34,6 +34,7 @@ $(document).ready(function() {
 		$cities = $('#city_id');
 		$crime_type = $('#crime_type');
 		$crime_category = $('#crime_category');
+		$offense_detail = $('#offense');
 
 		$region.on('change', function(e) {
 			e.preventDefault();
@@ -89,10 +90,36 @@ $(document).ready(function() {
 					console.log(resp);
 					$crime_category.empty();
 					var data = resp.crime_categories;
+					$crime_category.append('<option value="">Choose</option>')
 					data.forEach((d) => {
 						$crime_category.append($('<option>', { 
 					        value: d.crime_category_id,
 					        text : d.crime_category_name 
+					    }));
+					});
+				}
+			})
+		});
+
+		$crime_category.on('change', function(e) {
+			e.preventDefault();
+			var id = 0;
+			if ($(this).val() != '') {
+				id = $(this).val();
+			}
+
+			$.ajax({
+				url:  'http://localhost:8000/crime/get-crime-offenses/' + id,
+				type: 'GET',
+				success: function(resp) {
+					console.log(resp);
+					$offense_detail.empty();
+					var data = resp.offenses;
+					$offense_detail.append('<option value="">Choose</option>')
+					data.forEach((d) => {
+						$offense_detail.append($('<option>', { 
+					        value: d.offense_id,
+					        text : d.offense_name 
 					    }));
 					});
 				}

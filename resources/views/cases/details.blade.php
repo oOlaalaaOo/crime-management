@@ -24,74 +24,59 @@
 </div>
 <div class="wrapper wrapper-content">
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h2>Case Details <span class="pull-right"><a href="{{ route('case.files.add.view', ['case_id' => $case->case_id]) }}" class="btn btn-warning"><i class="fa fa-plus"></i> Add Case Files</a></span></h2></div>
-                    <div class="ibox-content">
-      
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td style="width: 25%; border: 0px" class="text-right"><strong>Crime Classification:</strong></td>
-                                    <td style="border: 0px">{{ $case->crime_classification_name }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 25%; border: 0px" class="text-right"><strong>Incedent Date:</strong></td>
-                                    <td style="border: 0px">{{ $case->incident_at }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 25%; border: 0px" class="text-right"><strong>Crime Location:</strong></td>
-                                    <td style="border: 0px">{{ $case->regDesc . ', ' . $case->provDesc . ', ' . $case->citymunDesc . ', ' . $case->home_address }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 25%; border: 0px" class="text-right"><strong>Entry No:</strong></td>
-                                    <td style="border: 0px">{{ $case->entry_no }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 25%; border: 0px" class="text-right"><strong>Reported Date:</strong></td>
-                                    <td style="border: 0px">{{ $case->reported_at }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 25%; border: 0px" class="text-right"><strong>Crime Type:</strong></td>
-                                    <td style="border: 0px">{{ $case->crime_type_name }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 25%; border: 0px" class="text-right"><strong>Offense Detail:</strong></td>
-                                    <td style="border: 0px">{{ $case->detail }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <hr>
-
-                        <div class="slick_demo_2">
-                            @foreach($case_files as $case_file)
-                            <div>
-                                <div class="ibox-content">
-                                    <img src="{{ URL::asset('case-files/' . $case->case_id . '/'. $case_file->case_image) }}" class="img-responsive">
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                </div>
-            </div>
-
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h2>Map</h2>
+                    <h2>Case Details <span class="pull-right"><a href="{{ route('case.add-crime-view', ['case_id' => $case->case_id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-plus"></i> Add Crime</a></span></h2>
                 </div>
                 <div class="ibox-content">
-                    <div id="map" style="width:100%;height:400px;">
-                    </div>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td style="width: 15%; border: 0px"><strong>Created Date:</strong></td>
+                                <td style="border: 0px">{{ date('F d, Y H:i:s', strtotime($case->created_at)) }}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 15%; border: 0px"><strong>Case Status:</strong></td>
+                                <td style="border: 0px">{{ ucfirst($case->case_status) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <hr>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Type</th>
+                                <th>Category</th>
+                                <th>Offense</th>
+                                <th>Classification</th>
+                                <th>Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($case_details as $cd)
+                            <tr>
+                                <td><strong>{{ $loop->index + 1 }}</strong></td>
+                                <td>{{ $cd->crime_type_name }}</td>
+                                <td>{{ $cd->crime_category_name }}</td>
+                                <td>{{ $cd->offense_name }}</td>
+                                <td>{{ $cd->crime_classification_name }}</td>
+                                <td>{{ $cd->home_address }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
         </div>
-        <div class="col-sm-4">
+       
+        <div class="col-sm-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h2>Victims <a href="{{ route('victim.add.view', ['case_id' => $case->case_id]) }}" class="pull-right btn btn-warning btn-sm"><i class="fa fa-plus"></i></a></h2>
+                    <h2>Victims <a href="{{ route('victim.add.view', ['case_id' => $case->case_id]) }}" class="pull-right btn btn-warning btn-sm"><i class="fa fa-plus"></i> Add Victim</a></h2>
                 </div>
                 <div class="ibox-content">
                     
@@ -104,9 +89,12 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="col-sm-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h2>Suspects <a href="{{ route('suspect.add.view', ['case_id' => $case->case_id]) }}" class="pull-right btn btn-warning btn-sm"><i class="fa fa-plus"></i></a></h2>
+                    <h2>Suspects <a href="{{ route('suspect.add.view', ['case_id' => $case->case_id]) }}" class="pull-right btn btn-warning btn-sm"><i class="fa fa-plus"></i> Add Suspect</a></h2>
                 </div>
                 <div class="ibox-content">
                     
@@ -118,14 +106,43 @@
 
                 </div>
             </div>
-
-            
         </div>
+        
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>Case Files <span class="pull-right"><a href="{{ route('case.files.add.view', ['case_id' => $case->case_id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-plus"></i> Add Files</a></span></h2>
+                </div>
+                <div class="ibox-content">
+                    <div class="slick_demo_2">
+                        @foreach($case_files as $case_file)
+                        <div>
+                            <div class="ibox-content">
+                                <img src="{{ URL::asset('case-files/' . $case->case_id . '/'. $case_file->case_image) }}" class="img-responsive">
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {{-- <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>Map</h2>
+                </div>
+                <div class="ibox-content">
+                    <div id="map" style="width:100%;height:400px;">
+                    </div>
+                </div>
+            </div>
+        </div> --}}
     </div>
 </div>
 @endsection
 @section('more_scripts')
-    <script>
+    {{-- <script>
     function myMap() {
 
         var lat = '{{ $case->crime_coordinate_lat }}';
@@ -145,6 +162,6 @@
         marker.setMap(map);
     }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4g5tTbLP8pq1P6W0VtAc7TY8bMcc3Mm0&callback=myMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4g5tTbLP8pq1P6W0VtAc7TY8bMcc3Mm0&callback=myMap"></script> --}}
     
 @endsection

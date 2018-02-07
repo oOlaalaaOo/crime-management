@@ -47,29 +47,23 @@
                     @endif
                     @if(count($cases) > 0)
                     
-                    <table class="footable table table-stripped toggle-arrow-tiny">
+                    <table class="table table-stripped">
                         <thead>
                             <tr>
-                                <th data-toggle="true" style="width: 15%">Case No</th>
-                                <th style="width: 10%">Status</th>
-                                <th style="width: 20%">Police Handler</th>
-                                <th style="width: 15%">Incident Date</th>
-                                <th data-hide="all">Type</th>
-                                <th data-hide="all">Category</th>
-                                <th data-hide="all">Classification</th>
-                                <th style="width: 40%">Action</th>
+                                <th>#</th>
+                                <th>Case No</th>
+                                <th>Status</th>
+                                <th>Created Date</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($cases as $data)
                             <tr>
-                                <td>{{ $data->case_no }}</td>
+                                <td>{{ $loop->index + 1 }}</td>
+                                <td>{{ $data->case_unique_no }}</td>
                                 <td>@if($data->case_status == 'ongoing')<span class="label label-info">{{ ucfirst($data->case_status) }}</span> @else <span class="label label-danger">{{ ucfirst($data->case_status) }}</span> @endif</td>
-                                <td><strong>{{ $data->name }}</strong></td>
-                                <td>{{ date('F d, Y', strtotime($data->incident_at)) }}</td>
-                                <td>{{ $data->crime_type }}</td>
-                                <td>{{ $data->crime_category }}</td>
-                                <td>{{ $data->crime_classification }}</td>
+                                <td>{{ date('F d, Y H:i:s', strtotime($data->created_at)) }}</td>
                                 <td>
                                     <a href="{{ route('case.details', ['case_id' => $data->case_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-mail-forward"></i> View</a> 
                                     @if($data->case_status == 'ongoing')
@@ -104,10 +98,10 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="5">
-                            <ul class="pagination pull-right"></ul>
-                        </td>
-                    </tr>
+                            <td colspan="5" class="text-right">
+                                {{ $cases->appends(['case_no' => isset($case_no) ? $case_no : ''])->links() }}
+                            </td>
+                        </tr>
                     </tfoot>
                 </table>
                 

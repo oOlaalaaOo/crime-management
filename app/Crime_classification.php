@@ -9,6 +9,6 @@ class Crime_classification extends Model
     protected $table = 'crime_classifications';
     protected $primaryKey = 'crime_classification_id';
     protected $fillable = [
-    	'name'
+    	'crime_classification_name'
     ];
 }

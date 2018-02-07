@@ -18,7 +18,7 @@
     </div>
     <div class="col-sm-8">
         <div class="title-action">
-            <a class="btn btn-default" href="{{ route('suspect.all') }}"><i class="fa fa-arrow-left"></i> Back</a>
+            <a class="btn btn-default" href="{{ route('case.details', ['case_id' => $case_id]) }}"><i class="fa fa-arrow-left"></i> Back</a>
         </div>
     </div>
 </div>

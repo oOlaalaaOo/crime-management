@@ -33,8 +33,20 @@ Route::get('crime/get-crime-categories/{crime_type_id}', function($crime_type_id
 	
 });
 
+Route::get('crime/get-crime-offenses/{crime_category_id}', function($crime_category_id) {
+	$crime_categories = [];
+	if ($crime_category_id != '') {
+		$offenses = \DB::table('offenses')->where('crime_category_id', $crime_category_id)->get();
+		return response()->json(['offenses' => $offenses]);
+	}
+	return response()->json(['crime_categories' => $crime_categories]);
+	
+});
+
 Route::get('case/add', 'CaseController@add_view')->name('case.add.view');
 Route::post('case/add', 'CaseController@add')->name('case.add');
+Route::get('case/add-crime/{case_id}', 'CaseController@add_crime_view')->name('case.add-crime-view');
+Route::post('case/add-crime', 'CaseController@add_crime')->name('case.add-crime');
 Route::get('case/update/{case_id}', 'CaseController@update_view')->name('case.update.view');
 Route::post('case/update', 'CaseController@update')->name('case.update');
 Route::get('case/all', 'CaseController@all')->name('case.all');
@@ -99,3 +111,11 @@ Route::post('rank/update', 'RankController@update')->name('rank.update');
 Route::get('reports', 'ReportController@index')->name('reports');
 
 Route::get('/chart/case-per-year', 'HomeController@case_per_year')->name('chart.case-per-year');
+
+
+Route::get('crime/offense/all', 'OffenseController@all')->name('crime.offense.all');
+Route::get('crime/offense/add', 'OffenseController@add_view')->name('crime.offense.add.view');
+Route::post('crime/offense/add', 'OffenseController@add')->name('crime.offense.add');
+Route::get('crime/offense/update/{offense_id}', 'OffenseController@update_view')->name('crime.offense.update.view');
+Route::post('crime/offense/update', 'OffenseController@update')->name('crime.offense.update');
+Route::post('crime/offense/delete', 'OffenseController@delete')->name('crime.offense.delete');

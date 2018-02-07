@@ -32,7 +32,7 @@ class VictimController extends Controller
 
         $victims = DB::table('victims')                         
                         ->whereIn('victim_id', $cvs)
-                        ->get();
+                        ->paginate(5);
 
         return view('victims')
                 ->with('active_menu', 'victims')
@@ -56,14 +56,25 @@ class VictimController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $victims = DB::table('case_victims')                         
+        $case_victims = DB::table('case_victims')
+                            ->selectRaw('DISTINCT(case_victims.victim_id)')
                             ->leftJoin('victims', 'case_victims.victim_id', '=', 'victims.victim_id')
                             ->where(function($query) use($name) {
                                 $query->orWhere('victims.first_name' , 'like', '%' . $name . '%');
                                 $query->orWhere('victims.mid_name' , 'like', '%' . $name . '%');
                                 $query->orWhere('victims.last_name' , 'like', '%' . $name . '%');
                             }) 
-                            ->paginate(5);
+                            ->get();
+        $cvs = [];
+
+        foreach ($case_victims as $cv)
+        {
+            $cvs[] = $cv->victim_id;
+        }
+
+        $victims = DB::table('victims')                         
+                        ->whereIn('victim_id', $cvs)
+                        ->paginate(5);
 
         return view('victims')
                 ->with('active_menu', 'victims')

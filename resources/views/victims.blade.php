@@ -46,7 +46,7 @@
                     <br /><br />
                     @endif
                     @if(count($victims) > 0)
-                    <table class="footable table table-stripped toggle-arrow-tiny">
+                    <table class="table table-stripped">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -61,7 +61,7 @@
                         <tbody>
                             @foreach($victims as $data)
                             <tr>
-                                <td></td>
+                                <td>{{ $loop->index + 1 }}</td>
                                 <td>{{ $data->first_name . ' ' . $data->mid_name . ' ' . $data->last_name }}</td>
                                 <td>{{ ucfirst($data->gender) }}</td>
                                 <td>{{ ucfirst($data->nationality) }}</td>
@@ -76,7 +76,7 @@
                         <tfoot>
                             <tr>
                                 <td colspan="7">
-                                    <ul class="pagination pull-right">
+                                    {{ $victims->appends(['name' => isset($name) ? $name : ''])->links() }}
                                 </td>
                             </tr>
                         </tfoot>
