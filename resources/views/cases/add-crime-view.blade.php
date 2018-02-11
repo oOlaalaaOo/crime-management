@@ -31,6 +31,7 @@
                     <div class="ibox-content">
                         <form action="{{ route('case.add-crime') }}" method="post">
                             {{ csrf_field() }}
+                            <input type="hidden" name="today" value="{{ date('Y-m-d') }}">
                             <input type="hidden" name="case_id" value="{{ $case_id }}">
                             <div id="adding-case">
                                 

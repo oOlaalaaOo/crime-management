@@ -57,7 +57,26 @@ class SuspectController extends Controller
                                 $query->orWhere('suspects.mid_name' , 'like', '%' . $name . '%');
                                 $query->orWhere('suspects.last_name' , 'like', '%' . $name . '%');
                             }) 
+                            ->paginate(10);
+
+        $case_suspects = DB::table('case_suspects')
+                            ->selectRaw('DISTINCT(suspect_id)')
                             ->get();
+        $css = [];
+
+        foreach ($case_suspects as $cs)
+        {
+            $css[] = $cs->suspect_id;
+        }
+
+        $suspects = DB::table('suspects')                         
+                        ->whereIn('suspect_id', $css)
+                        ->where(function($query) use($name) {
+                            $query->orWhere('suspects.first_name' , 'like', '%' . $name . '%');
+                            $query->orWhere('suspects.mid_name' , 'like', '%' . $name . '%');
+                            $query->orWhere('suspects.last_name' , 'like', '%' . $name . '%');
+                        })
+                        ->paginate(10);
 
         return view('suspects')
                 ->with('active_menu', 'suspects')
@@ -138,7 +157,7 @@ class SuspectController extends Controller
         $suspect->address = $request->input('address');
         $suspect->occupation = $request->input('occupation');
         $suspect->birth_date = $request->input('birth_date');
-        $suspect->gender = $request->input('gender');
+        $suspect->sex = $request->input('gender');
         $suspect->civil_status = $request->input('civil_status');
         $suspect->nationality = $request->input('nationality');
 
@@ -217,7 +236,7 @@ class SuspectController extends Controller
         $suspect->address = $request->input('address');
         $suspect->occupation = $request->input('occupation');
         $suspect->birth_date = $request->input('birth_date');
-        $suspect->gender = $request->input('gender');
+        $suspect->sex = $request->input('gender');
         $suspect->civil_status = $request->input('civil_status');
         $suspect->nationality = $request->input('nationality');
 

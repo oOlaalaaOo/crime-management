@@ -101,39 +101,43 @@ class UserController extends Controller
    }
 
    public function all() {
-      $users = DB::table('users')->where('user_type_id', '!=', 1)->get();
-      $total_user_cases = DB::table('user_cases')->where('user_id', Auth::user()->user_id)->count();
-      $ongoing_user_cases = DB::table('user_cases')
-                              ->leftJoin('cases', 'user_cases.case_id', '=', 'cases.case_id')
-                              ->where('user_cases.user_id', Auth::user()->user_id)
-                              ->where('cases.case_status', '=', 'ongoing')
-                              ->count();
-      $completed_user_cases = DB::table('user_cases')
-                              ->leftJoin('cases', 'user_cases.case_id', '=', 'cases.case_id')
-                              ->where('user_cases.user_id', Auth::user()->user_id)
-                              ->where('cases.case_status', '=', 'completed')
-                              ->count();
+      $officers = DB::table('users')
+                        ->leftJoin('ranks', 'users.rank_id', '=', 'ranks.rank_id')
+                        ->leftJoin('police_stations', 'users.police_station_id', '=', 'police_stations.police_station_id')
+                        ->where('user_type_id', 2)
+                        ->paginate(5);
+
+      $directors = DB::table('users')
+                        ->where('user_type_id', 3)
+                        ->paginate(5);
 
       return view('users.show-all')       
                ->with('active_menu', 'account')
                ->with('active_submenu', 'users')
-               ->with('users', $users)
-               ->with('total_user_cases', $total_user_cases)
-               ->with('ongoing_user_cases', $ongoing_user_cases)
-               ->with('completed_user_cases', $completed_user_cases);
+               ->with('officers', $officers)
+               ->with('directors', $directors);
    }
 
    public function add_view() {
 
       $ranks = \App\Rank::all();
-
+      $stations = \App\Police_station::all();
       return view('users.add-view')
                   ->with('active_menu', 'account')
                   ->with('active_submenu', '')
-                  ->with('ranks', $ranks);
+                  ->with('ranks', $ranks)
+                  ->with('stations', $stations);
    }
 
-   public function add(Request $request) {
+   public function add_city_director_view() 
+   {
+      return view('users.add-city-director')
+                  ->with('active_menu', 'account')
+                  ->with('active_submenu', '');
+   }
+
+   public function add(Request $request) 
+   {
       $validator = Validator::make($request->all(), [
          'name' => 'required',
          'username' => 'required|email|unique:users,username',
@@ -141,7 +145,8 @@ class UserController extends Controller
          'user_rank_id' => 'required'
       ]);
 
-      if ($validator->fails()) {
+      if ($validator->fails()) 
+      {
          return redirect()->back()->withErrors($validator)->withInput();
       }
 
@@ -152,13 +157,50 @@ class UserController extends Controller
       $user->status = 'active';
       $user->user_type_id = 2;
       $user->police_station_id = 1;
-      $user->user_rank_id = $request->input('user_rank_id');
+      $user->rank_id = $request->input('user_rank_id');
 
-      if ($user->save()) {
+      if ($user->save()) 
+      {
          session()->flash('status', true);
       }
+      else
+      {
+         session()->flash('status', false);
+      }
 
-      session()->flash('status', false);
+      return redirect()->route('users.all');
+   }
+
+   public function add_city_director(Request $request) 
+   {
+      $validator = Validator::make($request->all(), [
+         'name' => 'required',
+         'username' => 'required|email|unique:users,username',
+         'password' => 'required|confirmed',
+      ]);
+
+      if ($validator->fails()) 
+      {
+         return redirect()->back()->withErrors($validator)->withInput();
+      }
+
+      $user = new User;
+      $user->name = $request->name;
+      $user->username = $request->username;
+      $user->password = bcrypt($request->password);
+      $user->status = 'active';
+      $user->user_type_id = 3;
+      $user->police_station_id = 0;
+      $user->rank_id = 0;
+
+      if ($user->save()) 
+      {
+         session()->flash('status', true);
+      }
+      else
+      {
+         session()->flash('status', false);
+      }
 
       return redirect()->route('users.all');
       
@@ -168,18 +210,20 @@ class UserController extends Controller
    {
       $user = \App\User::find($user_id);
       $ranks = \App\Rank::all();
+      $stations = \App\Police_station::all();
+
       return view('users.show')
                ->with('active_menu', 'users')
                ->with('active_submenu', '')
                ->with('user', $user)
-               ->with('ranks', $ranks);
+               ->with('ranks', $ranks)
+               ->with('stations', $stations);
    }
 
    public function update(Request $request)
    {
       $validator = Validator::make($request->all(), [
          'name' => 'required',
-         'user_rank_id' => 'required'
       ]);
 
       if ($validator->fails())
@@ -189,8 +233,10 @@ class UserController extends Controller
 
       $user = \App\User::find($request->input('user_id'));
       $user->name = $request->input('name');
-      $user->user_rank_id = $request->input('user_rank_id');
+      $user->rank_id = $request->input('user_rank_id');
       $user->status = $request->has('user_status') == true ? 'active' : 'inactive';
+      $user->police_station_id = $request->input('station_id');
+
       if ($user->save())
       {
          session()->flash('status', true);

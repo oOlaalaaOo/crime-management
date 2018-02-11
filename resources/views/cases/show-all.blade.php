@@ -24,7 +24,15 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h2>Case List <span class="pull-right"><a class="btn btn-warning" href="{{ route('case.add.view') }}"><i class="fa fa-plus"></i> Add Case</a></span></h2>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h3>Cases</h3>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <a class="btn btn-warning pull-right" href="{{ route('case.add.view') }}"><i class="fa fa-plus"></i> New Case</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="ibox-content">
                     <form action="{{ route('case.search') }}" method="GET">
@@ -42,8 +50,8 @@
                         </div>
                     </form>
                     @if(isset($case_no))
-                    Search for Case No.: <u>{{ $case_no }}</u>
-                    <br /><br />
+                        Search for Case No.: <u>{{ $case_no }}</u>
+                        <br /><br />
                     @endif
                     @if(count($cases) > 0)
                     
@@ -68,7 +76,7 @@
                                     <a href="{{ route('case.details', ['case_id' => $data->case_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-mail-forward"></i> View</a> 
                                     @if($data->case_status == 'ongoing')
                                     <a href="{{ route('case.update.view', ['case_id' => $data->case_id]) }}" class="btn btn-default btn-sm" title="Edit details"><i class="fa fa-pencil"></i> Edit</a> 
-                                    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#status_modal"><i class="fa fa-legal"></i> Cased Close?</button>
+                                    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#status_modal"><i class="fa fa-legal"></i> Close Case</button>
                                     <!-- Modal -->
                                     <div class="modal fade" id="status_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                       <div class="modal-dialog modal-sm" role="document">

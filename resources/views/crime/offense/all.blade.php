@@ -50,6 +50,7 @@
                         </tbody>
                         
                 </table>
+                {{ $offenses->links() }}
             </div>
         </div>
     </div>

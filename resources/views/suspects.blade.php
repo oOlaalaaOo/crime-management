@@ -3,13 +3,13 @@
 @section('content')
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
-        <h2>Suspects</h2>
+        <h2>Suspect List</h2>
         <ol class="breadcrumb">
             <li class="active">
-                <a href="{{ URL::to('home') }}">Dashboard</a>
+                <a href="{{ URL::to('home') }}">Case List</a>
             </li>
             <li class="active">
-                <strong>Suspects</strong>
+                <strong>Suspect List</strong>
             </li>
         </ol>
     </div>
@@ -24,7 +24,7 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h2>Suspect List</h2>
+                    <h3>Suspects</h3>
                 </div>
                 <div class="ibox-content">
                     <form action="{{ route('suspect.search') }}" method="GET">
@@ -42,19 +42,19 @@
                         </div>
                     </form>
                     @if(isset($name))
-                    Search result for: <u>{{ $name }}</u>
-                    <br /><br />
+                        Search result for: <u>{{ $name }}</u>
+                        <br /><br />
                     @endif
                     @if(count($suspects) > 0)
-                    <table class="footable table table-stripped toggle-arrow-tiny">
+                    <table class="table table-stripped">
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                <th>Gender</th>
+                                <th>Sex</th>
                                 <th>Nationality</th>
                                 <th>Birth Date</th>
-                                <th>Action</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,22 +62,15 @@
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>{{ $data->first_name . ' ' . $data->mid_name . ' ' . $data->last_name }}</td>
-                                <td>{{ ucfirst($data->gender) }}</td>
+                                <td>{{ ucfirst($data->sex) }}</td>
                                 <td>{{ ucfirst($data->nationality) }}</td>
                                 <td>{{ date('F d, Y', strtotime($data->birth_date)) }}</td>
-                                <td><a href="{{ route('suspect.update.view', ['suspect_id' => $data->suspect_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-pencil"></i> Update</a></td>
+                                <td><a href="{{ route('suspect.update.view', ['suspect_id' => $data->suspect_id]) }}" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i> Update</a></td>
                             </tr>
                             @endforeach
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="7">
-                                    <ul class="pagination pull-right"></ul>
-                                </td>
-                            </tr>
-                        </tfoot>
+                        </tbody>   
                     </table>
-                    
+                    {{ $suspects->appends(['name' => isset($name) ? $name : ''])->links() }}
                     @else
                     <h3>No Result</h3>
                     @endif

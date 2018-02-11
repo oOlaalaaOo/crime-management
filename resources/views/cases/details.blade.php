@@ -3,16 +3,13 @@
 @section('content')
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
-        <h2>Dashboard</h2>
+        <h2>Case</h2>
         <ol class="breadcrumb">
             <li class="active">
-                <a href="{{ route('home') }}">Dashboard</a>
+                <a href="{{ route('case.all') }}">Case List</a>
             </li>
             <li class="active">
-                <a href="{{ route('case.all') }}">Case All</a>
-            </li>
-            <li class="active">
-                <strong>Case No: {{ $case->case_unique_no }}</strong>
+                <strong>Case Details</strong>
             </li>
         </ol>
     </div>
@@ -27,7 +24,7 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h2>Case Details <span class="pull-right"><a href="{{ route('case.add-crime-view', ['case_id' => $case->case_id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-plus"></i> Add Crime</a></span></h2>
+                    <h3>Case Details <span class="pull-right"><a href="{{ route('case.add-crime-view', ['case_id' => $case->case_id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-plus"></i> Add Crime</a></span></h3>
                 </div>
                 <div class="ibox-content">
                     <table class="table">

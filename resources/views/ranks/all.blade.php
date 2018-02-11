@@ -23,7 +23,7 @@
         <div class="col-md-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h2>Crime Types</h2>
+                    <h2>Ranks</h2>
                 </div>
                 <div class="ibox-content">
                     <table class="table table-stripped">

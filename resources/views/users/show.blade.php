@@ -14,7 +14,7 @@
     </div>
     <div class="col-sm-8">
         <div class="title-action">
-            <a class="btn btn-default" href="{{ route('users.all') }}"><i class="fa fa-arrow-left"></i> User List</a>
+            <a class="btn btn-default" href="{{ route('users.all') }}"><i class="fa fa-arrow-left"></i> Back</a>
         </div>
     </div>
 </div>
@@ -38,19 +38,32 @@
                             <span class="text-block">{{ $errors->first('name') }}</span>
                             @endif
                         </div>
+
+                        @if($user->user_type_id == 2)
                         <div class="form-group @if($errors->has('user_rank_id')) has-error @endif">
                             <label>Officer Rank</label>
                             <select class="form-control" name="user_rank_id">
-                                <option value="">-Select-</option>
                                 @foreach($ranks as $rank)
-                                    <option value="{{ $rank->rank_id }}" @if(old('user_rank_id', $user->user_rank_id) == $rank->rank_id) selected @endif>{{ $rank->code }}</option>
+                                    <option value="{{ $rank->rank_id }}" @if(old('user_rank_id', $user->rank_id) == $rank->rank_id) selected @endif>{{ $rank->code }}</option>
                                 @endforeach
                             </select>
                             @if($errors->has('user_rank_id'))
                             <span class="text-block">{{ $errors->first('user_rank_id') }}</span>
                             @endif
                         </div>
-
+                        
+                        <div class="form-group @if($errors->has('station_id')) has-error @endif">
+                            <label>Station No.</label>
+                            <select class="form-control" name="station_id">
+                                @foreach($stations as $station)
+                                    <option value="{{ $station->police_station_id }}" @if(old('station_id', $user->police_station_id) == $station->police_station_id) selected @endif>{{ $station->station }}</option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('station_id'))
+                                <span class="text-block">{{ $errors->first('station_id') }}</span>
+                            @endif
+                        </div>
+                        @endif
                         <div class="form-group">
                             <label>Status: <input type="checkbox" name="user_status" @if(old('user_status', $user->status) == 'active') checked @endif value="active"></label>
                         </div>

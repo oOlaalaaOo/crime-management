@@ -5,7 +5,7 @@
         <h2>Reports</h2>
         <ol class="breadcrumb">
             <li class="active">
-                <a href="{{ URL::to('home') }}">Dashboard</a>
+                <a href="{{ URL::to('home') }}">Case List</a>
             </li>
             <li class="active">
                 <strong>Reports</strong>

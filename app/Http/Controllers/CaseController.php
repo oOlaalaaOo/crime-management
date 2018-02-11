@@ -68,7 +68,7 @@ class CaseController extends Controller
     	$validator = Validator::make($request->all(), [
     		'crime_classification' => 'required',
     		'home_address'        => 'required',
-    		'incident_at'         => 'required|date_format:"Y-m-d"',
+    		'incident_at'         => 'required|date_format:"Y-m-d"|before:'.date('Y-m-d'),
     		'crime_type'          => 'required',
     		'crime_category'      => 'required',
             'offense'               => 'required',
@@ -135,11 +135,12 @@ class CaseController extends Controller
     }
 
     public function add_crime(Request $request) {
-
+  
         $validator = Validator::make($request->all(), [
+            'today'                 => 'required',
             'crime_classification' => 'required',
             'home_address'        => 'required',
-            'incident_at'         => 'required|date_format:"Y-m-d"',
+            'incident_at'         => 'required|date_format:Y-m-d|before:today',
             'crime_type'          => 'required',
             'crime_category'      => 'required',
             'offense'               => 'required',
@@ -337,7 +338,7 @@ class CaseController extends Controller
                             ->get();
 
         return view('cases.details')
-                ->with('active_menu', '')
+                ->with('active_menu', 'case')
                 ->with('active_submenu', '')
                 ->with('case', $case)
                 ->with('case_details', $case_details)

@@ -41,15 +41,30 @@ admin:
 		- types
 		- categories
 		- classifications
+		- offense
 	- reports
 
-Member:
-	- Dashboard
+Officer:
 	- Case
 	- Victims
 	- Suspects
+	- Blotter
 	- Reports
 
+City Director:
+	- view case
+	- reports
+
+Reports:
+	- monthly
+	- yearly
+
+
+user log
+reports
+blotter
+map
+gender - sex
 
 
 -----------------------------------------------------------------------------

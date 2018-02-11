@@ -21,7 +21,8 @@
     <link href="{{ asset('inspinia/css/plugins/slick/slick.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/css/plugins/slick/slick-theme.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/css/plugins/chosen/bootstrap-chosen.css') }} " rel="stylesheet">
-
+    <link href="{{ asset('inspinia/css/plugins/dataTables/datatables.min.css') }} " rel="stylesheet">
+    <link href="{{ asset('inspinia/css/plugins/daterangepicker/daterangepicker-bs3.css') }} " rel="stylesheet">
 </head>
 
 <body class="skin-3">
@@ -42,33 +43,45 @@
                 </li>
                 @if(Auth::check())
 
-                    <li @if($active_menu == 'dashboard') class="active" @endif><a href="{{ route('login') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a></li>
+                    <li @if($active_menu == 'dashboard') class="active" @endif><a href="{{ route('login') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Cases</span></a></li>
 
                     @if(Auth::user()->user_type_id == 1)
                         
-                        <li @if($active_submenu == 'users') class="active" @endif><a href="{{ route('users.all') }}"><i class="fa fa-user-secret"></i> <span class="nav-label"> Officers</span></a></li>
+                        <li @if($active_submenu == 'users') class="active" @endif><a href="{{ route('users.all') }}"><i class="fa fa-users"></i> <span class="nav-label"> Users</span></a></li>
                         
                         <li @if($active_menu == 'rank') class="active" @endif><a href="{{ route('rank.all') }}"><i class="fa fa-user-secret"></i> <span class="nav-label"> Ranks</span></a></li>
+                        
+                        <li @if($active_submenu == 'stations') class="active" @endif><a href="{{ route('stations.all') }}"><i class="fa fa-university"></i> <span class="nav-label"> Stations</span></a></li>
 
                         <li @if($active_menu == 'crimes') class="active" @endif>
                             <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Crime Management </span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse @if($active_menu == 'crimes') in @endif">
-                                <li @if($active_submenu == 'crime_type') class="active" @endif><a href="{{ route('crime.type.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Crime Types</span></a></li>
-                                <li @if($active_submenu == 'crime_category') class="active" @endif><a href="{{ route('crime.category.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Crime Categories</span></a></li>
-                                <li @if($active_submenu == 'crime_classification') class="active" @endif><a href="{{ route('crime.classification.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Crime Classifications</span></a></li>
-                                <li @if($active_submenu == 'offense') class="active" @endif><a href="{{ route('crime.offense.all') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Offenses</span></a></li>
+                                <li @if($active_submenu == 'crime_type') class="active" @endif><a href="{{ route('crime.type.all') }}"><span class="nav-label">Crime Types</span></a></li>
+                                <li @if($active_submenu == 'crime_category') class="active" @endif><a href="{{ route('crime.category.all') }}"><span class="nav-label">Crime Categories</span></a></li>
+                                <li @if($active_submenu == 'crime_classification') class="active" @endif><a href="{{ route('crime.classification.all') }}"> <span class="nav-label">Crime Classifications</span></a></li>
+                                <li @if($active_submenu == 'offense') class="active" @endif><a href="{{ route('crime.offense.all') }}"> <span class="nav-label">Offenses</span></a></li>
                             </ul>
                         </li>
 
                     @else                  
-
+                        
+                        <li @if($active_menu == 'blotter') class="active" @endif><a href="{{ route('blotter.all') }}"><i class="fa fa-folder"></i> <span class="nav-label"> Blotters</span></a></li>
                         <li @if($active_menu == 'case') class="active" @endif><a href="{{ route('case.all') }}"><i class="fa fa-folder"></i> <span class="nav-label"> Case</span></a></li>
-                        <li @if($active_menu == 'victims') class="active" @endif><a href="{{ route('victim.all') }}"><i class="fa fa-address-book"></i> <span class="nav-label"> Victims</span></a></li>
-                        <li @if($active_menu == 'suspects') class="active" @endif><a href="{{ route('suspect.all') }}"><i class="fa fa-address-book"></i> <span class="nav-label"> Suspects</span></a></li>
+                        <li @if($active_menu == 'victims') class="active" @endif><a href="{{ route('victim.all') }}"><i class="fa fa-users"></i> <span class="nav-label"> Victims</span></a></li>
+                        <li @if($active_menu == 'suspects') class="active" @endif><a href="{{ route('suspect.all') }}"><i class="fa fa-users"></i> <span class="nav-label"> Suspects</span></a></li>
                         
                     @endif           
                     
-                    <li @if($active_menu == 'reports') class="active" @endif><a href="{{ route('reports') }}"><i class="fa fa-th-large"></i> <span class="nav-label"> Reports</span></a></li>
+                    {{-- <li @if($active_menu == 'reports') class="active" @endif><a href="{{ route('reports') }}"><i class="fa fa-line-chart"></i> <span class="nav-label"> Reports</span></a></li> --}}
+
+                    <li @if($active_menu == 'reports') class="active" @endif>
+                            <a href="#"><i class="fa fa-line-chart"></i> <span class="nav-label">Reports </span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse @if($active_menu == 'reports') in @endif">
+                                <li @if($active_submenu == 'report_daily') class="active" @endif><a href="{{ route('reports.daily-view') }}"><span class="nav-label">Daily Report</span></a></li>
+                                <li @if($active_submenu == 'report_monthly') class="active" @endif><a href="{{ route('reports.monthly-view') }}"> <span class="nav-label">Monthly Report</span></a></li>
+                                <li @if($active_submenu == 'report_yearly') class="active" @endif><a href="{{ route('reports.yearly-view') }}"> <span class="nav-label">Yearly Report</span></a></li>
+                            </ul>
+                        </li>
 
                 @endif
 {{--                 <li>
@@ -156,6 +169,11 @@
     <script src="{{ asset('inspinia/js/plugins/slick/slick.min.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/toastr/toastr.min.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/chosen/chosen.jquery.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/dataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/fullcalendar/moment.min.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    
+
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
     <!-- Page-Level Scripts -->
     <script>
@@ -207,6 +225,40 @@
                     toastr.error('Action: Error');
                 
             @endif
+
+            var data_table_config = {
+                pageLength: 10,
+                responsive: true,
+                select: true,
+                dom: '<"html5buttons"B>lTfgitp',
+                buttons: [
+                    {extend: 'copy'},
+                    {extend: 'csv'},
+                    {extend: 'excel', title: 'ExampleFile'},
+                    {extend: 'pdf', title: 'ExampleFile'},
+
+                    {extend: 'print',
+                     customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    }
+                    }
+                ]
+
+            }
+
+            $('.dataTables-example').DataTable(data_table_config);
+
+            $('#daterange').daterangepicker();
+
+
+            $('#datepicker').daterangepicker({
+                format: 'YYYY-MM-DD',
+            });
         });
 
     </script>

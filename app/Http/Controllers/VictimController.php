@@ -157,7 +157,7 @@ class VictimController extends Controller
         $victim->address = $request->input('victim_address');
         $victim->occupation = $request->input('victim_occupation');
         $victim->birth_date = $request->input('victim_birth_date');
-        $victim->gender = $request->input('victim_gender');
+        $victim->sex = $request->input('victim_gender');
         $victim->civil_status = $request->input('victim_civil_status');
         $victim->nationality = $request->input('victim_nationality');
 
@@ -241,7 +241,7 @@ class VictimController extends Controller
         $victim->address = $request->input('victim_address');
         $victim->occupation = $request->input('victim_occupation');
         $victim->birth_date = $request->input('victim_birth_date');
-        $victim->gender = $request->input('victim_gender');
+        $victim->sex = $request->input('victim_gender');
         $victim->civil_status = $request->input('victim_civil_status');
         $victim->nationality = $request->input('victim_nationality');
 

@@ -55,6 +55,7 @@ Route::get('case/search', 'CaseController@search')->name('case.search');
 Route::get('case/files/add/{case_id}', 'CaseController@files_add_view')->name('case.files.add.view');
 Route::post('case/files/add', 'CaseController@files_add')->name('case.files.add');
 Route::post('case/status/update', 'CaseController@status_update')->name('case.status.update');
+Route::get('case/admin-search', 'HomeController@admin_search')->name('case.admin-search');
 
 Route::get('victim/all', 'VictimController@all')->name('victim.all');
 Route::get('victim/search', 'VictimController@search')->name('victim.search');
@@ -80,6 +81,9 @@ Route::get('users/add', 'UserController@add_view')->name('users.add.view');
 Route::post('users/add', 'UserController@add')->name('users.add');
 Route::get('users/show/{user_id}', 'UserController@show')->name('users.show');
 Route::post('users/update', 'UserController@update')->name('users.update');
+
+Route::get('users/add-city-director', 'UserController@add_city_director_view')->name('users.add-city-director.view');
+Route::post('users/add-city-director', 'UserController@add_city_director')->name('users.add-city-director');
 
 Route::get('crime/type/all', 'CrimeTypeController@all')->name('crime.type.all');
 Route::get('crime/type/add', 'CrimeTypeController@add_view')->name('crime.type.add.view');
@@ -108,8 +112,6 @@ Route::get('rank/add', 'RankController@add_view')->name('rank.add.view');
 Route::post('rank/add', 'RankController@add')->name('rank.add');
 Route::post('rank/update', 'RankController@update')->name('rank.update');
 
-Route::get('reports', 'ReportController@index')->name('reports');
-
 Route::get('/chart/case-per-year', 'HomeController@case_per_year')->name('chart.case-per-year');
 
 
@@ -119,3 +121,24 @@ Route::post('crime/offense/add', 'OffenseController@add')->name('crime.offense.a
 Route::get('crime/offense/update/{offense_id}', 'OffenseController@update_view')->name('crime.offense.update.view');
 Route::post('crime/offense/update', 'OffenseController@update')->name('crime.offense.update');
 Route::post('crime/offense/delete', 'OffenseController@delete')->name('crime.offense.delete');
+
+Route::get('stations/all', 'StationController@all')->name('stations.all');
+Route::get('stations/show/{station_id}', 'StationController@show')->name('stations.show');
+Route::get('stations/add', 'StationController@add_view')->name('stations.add.view');
+Route::post('stations/add', 'StationController@add')->name('stations.add');
+Route::post('stations/update', 'StationController@update')->name('stations.update');
+
+Route::get('blotter/all', 'BlotterController@all')->name('blotter.all');
+Route::get('blotter/show/{blotter_id}', 'BlotterController@show')->name('blotter.show');
+Route::get('blotter/add', 'BlotterController@add_view')->name('blotter.add.view');
+Route::post('blotter/add', 'BlotterController@add')->name('blotter.add');
+Route::post('blotter/update', 'BlotterController@update')->name('blotter.update');
+Route::get('blotter/view/{blotter_id}', 'BlotterController@view')->name('blotter.view');
+
+Route::get('reports/daily', 'ReportController@daily')->name('reports.daily');
+Route::get('reports/monthly', 'ReportController@monthly')->name('reports.monthly');
+Route::get('reports/yearly', 'ReportController@yearly')->name('reports.yearly');
+
+Route::get('reports/daily-view', 'ReportController@daily_view')->name('reports.daily-view');
+Route::get('reports/monthly-view', 'ReportController@monthly_view')->name('reports.monthly-view');
+Route::get('reports/yearly-view', 'ReportController@yearly_view')->name('reports.yearly-view');

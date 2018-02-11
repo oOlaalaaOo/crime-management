@@ -8,7 +8,7 @@
                 <a href="{{ route('users.all') }}">Users</a>
             </li>
             <li class="active">
-                <strong>Add Officer</strong>
+                <strong>Add User</strong>
             </li>
         </ol>
     </div>
@@ -23,12 +23,12 @@
         <div class="col-md-8">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h2>Add Officer</h2>
+                    <h2>Add City Director</h2>
                 </div>
                     
                 <div class="ibox-content">
                     
-                    <form action="{{ route('users.add') }}" method="post">
+                    <form action="{{ route('users.add-city-director') }}" method="post">
                         {{ csrf_field() }}
                         <div class="form-group @if($errors->has('name')) has-error @endif">
                             <label>Full Name</label>
@@ -37,30 +37,7 @@
                             <span class="text-block">{{ $errors->first('name') }}</span>
                             @endif
                         </div>
-                        <div class="form-group @if($errors->has('user_rank_id')) has-error @endif">
-                            <label>Officer Rank</label>
-                            <select class="form-control" name="user_rank_id">
-                                <option value="">-Select-</option>
-                                @foreach($ranks as $rank)
-                                    <option value="{{ $rank->rank_id }}" @if(old('user_rank_id') == $rank->rank_id) selected @endif>{{ $rank->code }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('user_rank_id'))
-                            <span class="text-block">{{ $errors->first('user_rank_id') }}</span>
-                            @endif
-                        </div>
-                        <div class="form-group @if($errors->has('station_id')) has-error @endif">
-                            <label>Station No.</label>
-                            <select class="form-control" name="station_id">
-                                <option value="">-Select-</option>
-                                @foreach($stations as $station)
-                                    <option value="{{ $station->police_station_id }}" @if(old('station_id') == $station->police_station_id) selected @endif>{{ $station->station }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('station_id'))
-                            <span class="text-block">{{ $errors->first('station_id') }}</span>
-                            @endif
-                        </div>
+                    
                         <div class="form-group @if($errors->has('username')) has-error @endif">
                             <label>Username</label>
                             <input type="text" name="username" value="{{ old('username') }}" class="form-control">
@@ -68,6 +45,7 @@
                             <span class="text-block">{{ $errors->first('username') }}</span>
                             @endif
                         </div>
+
                         <div class="form-group @if($errors->has('password')) has-error @endif">
                             <label>Password</label>
                             <input type="password" name="password" value="{{ old('password') }}" class="form-control">
@@ -84,7 +62,7 @@
                         </div>
                         
                         <div class="form-group text-right">
-                            <button type="submit" class="btn btn-success">Add New User</button>
+                            <button type="submit" class="btn btn-success">Add City Director</button>
                         </div>
                     </form>
                 </div>

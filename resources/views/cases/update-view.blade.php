@@ -3,19 +3,19 @@
 @section('content')
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
-        <h2>Dashboard</h2>
+        <h2>Case</h2>
         <ol class="breadcrumb">
-            <li class="active">
-                <a href="index.html">Dashboard</a>
+            <li>
+                <a href="{{ route('case.all') }}">Case List</a>
             </li>
-            {{-- <li class="active">
-                <strong>Breadcrumb</strong>
-            </li> --}}
+            <li class="active">
+                <strong>Case Update</strong>
+            </li>
         </ol>
     </div>
     <div class="col-sm-8">
         <div class="title-action">
-            <a class="btn btn-warning" href="{{ route('case.all') }}"><i class="fa fa-arrow-left"></i> Case List</a>
+            <a class="btn btn-default" href="{{ route('case.details', ['case_id' => $case->case_id]) }}"><i class="fa fa-arrow-left"></i> Back</a>
         </div>
     </div>
 </div>

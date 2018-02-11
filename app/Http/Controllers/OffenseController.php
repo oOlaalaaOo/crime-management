@@ -19,7 +19,7 @@ class OffenseController extends Controller
 
     	$offenses = DB::table('offenses')
     					->leftJoin('crime_categories', 'crime_categories.crime_category_id', '=', 'crime_categories.crime_category_id')
-    					->get();
+    					->paginate(5);
 
     	return view('crime.offense.all')
     			->with('active_menu', 'crimes')
