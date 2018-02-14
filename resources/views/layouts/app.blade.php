@@ -43,10 +43,9 @@
                 </li>
                 @if(Auth::check())
 
-                    <li @if($active_menu == 'dashboard') class="active" @endif><a href="{{ route('login') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Cases</span></a></li>
-
                     @if(Auth::user()->user_type_id == 1)
                         
+                        <li @if($active_menu == 'dashboard') class="active" @endif><a href="{{ route('login') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Cases</span></a></li>
                         <li @if($active_submenu == 'users') class="active" @endif><a href="{{ route('users.all') }}"><i class="fa fa-users"></i> <span class="nav-label"> Users</span></a></li>
                         
                         <li @if($active_menu == 'rank') class="active" @endif><a href="{{ route('rank.all') }}"><i class="fa fa-user-secret"></i> <span class="nav-label"> Ranks</span></a></li>
@@ -63,25 +62,30 @@
                             </ul>
                         </li>
 
-                    @else                  
+                    @elseif(Auth::user()->user_type_id == 2)                  
                         
-                        <li @if($active_menu == 'blotter') class="active" @endif><a href="{{ route('blotter.all') }}"><i class="fa fa-folder"></i> <span class="nav-label"> Blotters</span></a></li>
+                        
                         <li @if($active_menu == 'case') class="active" @endif><a href="{{ route('case.all') }}"><i class="fa fa-folder"></i> <span class="nav-label"> Case</span></a></li>
+                        <li @if($active_menu == 'blotter') class="active" @endif><a href="{{ route('blotter.all') }}"><i class="fa fa-folder"></i> <span class="nav-label"> Blotters</span></a></li>
                         <li @if($active_menu == 'victims') class="active" @endif><a href="{{ route('victim.all') }}"><i class="fa fa-users"></i> <span class="nav-label"> Victims</span></a></li>
                         <li @if($active_menu == 'suspects') class="active" @endif><a href="{{ route('suspect.all') }}"><i class="fa fa-users"></i> <span class="nav-label"> Suspects</span></a></li>
-                        
+
+                    @elseif(Auth::user()->user_type_id == 3)
+
+                        <li @if($active_menu == 'dashboard') class="active" @endif><a href="{{ route('login') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Cases</span></a></li>
+
                     @endif           
                     
                     {{-- <li @if($active_menu == 'reports') class="active" @endif><a href="{{ route('reports') }}"><i class="fa fa-line-chart"></i> <span class="nav-label"> Reports</span></a></li> --}}
 
                     <li @if($active_menu == 'reports') class="active" @endif>
-                            <a href="#"><i class="fa fa-line-chart"></i> <span class="nav-label">Reports </span><span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level collapse @if($active_menu == 'reports') in @endif">
-                                <li @if($active_submenu == 'report_daily') class="active" @endif><a href="{{ route('reports.daily-view') }}"><span class="nav-label">Daily Report</span></a></li>
-                                <li @if($active_submenu == 'report_monthly') class="active" @endif><a href="{{ route('reports.monthly-view') }}"> <span class="nav-label">Monthly Report</span></a></li>
-                                <li @if($active_submenu == 'report_yearly') class="active" @endif><a href="{{ route('reports.yearly-view') }}"> <span class="nav-label">Yearly Report</span></a></li>
-                            </ul>
-                        </li>
+                        <a href="#"><i class="fa fa-line-chart"></i> <span class="nav-label">Reports </span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse @if($active_menu == 'reports') in @endif">
+                            <li @if($active_submenu == 'report_daily') class="active" @endif><a href="{{ route('reports.daily-view') }}"><span class="nav-label">Daily Report</span></a></li>
+                            <li @if($active_submenu == 'report_monthly') class="active" @endif><a href="{{ route('reports.monthly-view') }}"> <span class="nav-label">Monthly Report</span></a></li>
+                            <li @if($active_submenu == 'report_yearly') class="active" @endif><a href="{{ route('reports.yearly-view') }}"> <span class="nav-label">Yearly Report</span></a></li>
+                        </ul>
+                    </li>
 
                 @endif
 {{--                 <li>

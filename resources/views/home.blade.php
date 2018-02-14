@@ -65,7 +65,7 @@
                                 <td><strong>{{ $case->case_unique_no }}</strong></td>
                                 <td>{{ ucfirst($case->status) }}</td>
                                 <td>{{ $case->name }}</td>
-                                <td></td>
+                                <td><a href="{{ route('case.details', ['case_id' => $case->case_id]) }}" class="btn btn-default btn-xs"><i class="fa fa-mail-forward"></i> View</a></td>
                             </tr>
                             @endforeach
                         </tbody>

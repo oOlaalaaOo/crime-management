@@ -20,6 +20,8 @@ use App\User_case;
 use App\Case_folder;
 use App\CrimeCoordinate;
 
+use App\Libraries\Userlog;
+
 use DB;
 use Validator;
 use Auth;
@@ -28,8 +30,10 @@ use File;
 
 class CaseController extends Controller
 {
-    public function __construct() {
+    protected $userlog;
 
+    public function __construct(Userlog $ul) {
+        $this->userlog = $ul;
     }
 
     public function add_view() {
@@ -129,6 +133,8 @@ class CaseController extends Controller
         $user_case->case_id = $case->case_id;
         $user_case->save();
 
+        $this->userlog->add(Auth::user()->user_id, 'Added Case ID:'. $case->case_id);
+
         session()->flash('status', true);
 
         return redirect()->route('case.details', ['case_id' => $case->case_id]);
@@ -193,13 +199,15 @@ class CaseController extends Controller
         $crime_coordinate->case_detail_id = $case_detail->case_detail_id;
         $crime_coordinate->save();
 
+        $this->userlog->add(Auth::user()->user_id, 'Added Case ID:'. $case->case_id);
+
         session()->flash('status', true);
 
         return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
 
     public function all() {
-
+        
         $cases = DB::table('user_cases')
                         ->leftJoin('cases', 'user_cases.case_id', '=', 'cases.case_id')
                         ->where('user_cases.user_id', '=', Auth::user()->user_id)
@@ -298,14 +306,19 @@ class CaseController extends Controller
         $crime_coordinate->crime_coordinate_long = $request->input('long');
         $crime_coordinate->save();
 
+        $this->userlog->add(Auth::user()->user_id, 'Updated Case ID:'. $request->input('case_id'));
+
         session()->flash('status', true);
         return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
 
     public function details($case_id) {
+        $isAdmin = Auth::user()->user_type_id ;
         $case = DB::table('user_cases')
                     ->leftJoin('cases', 'user_cases.case_id', '=', 'cases.case_id')
-                    ->where('user_cases.user_id', '=', Auth::user()->user_id)
+                    ->when($isAdmin == 2, function ($query) use ($isAdmin) {
+                        return $query->where('user_cases.user_id', '=', Auth::user()->user_id);
+                    })
                     ->where('cases.case_id', '=', $case_id)
                     ->first();
 
@@ -319,7 +332,9 @@ class CaseController extends Controller
                             ->leftJoin('crime_locations', 'case_details.crime_location_id', '=', 'crime_locations.crime_location_id')
                             ->leftJoin('refcitymun', 'crime_locations.city_id', '=', 'refcitymun.citymunCode')
                             ->leftJoin('crime_coordinates', 'case_details.case_detail_id', '=', 'crime_coordinates.case_detail_id')
-                            ->where('user_cases.user_id', '=', Auth::user()->user_id)
+                            ->when($isAdmin == 2, function ($query) use ($isAdmin) {
+                                return $query->where('user_cases.user_id', '=', Auth::user()->user_id);
+                            })
                             ->where('cases.case_id', '=', $case_id)
                             ->get();
 
@@ -363,7 +378,6 @@ class CaseController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-       
         $dir = $request->input('case_id');
 
         if (is_dir($dir) === false){
@@ -380,6 +394,8 @@ class CaseController extends Controller
         $case_folder->case_image = $filename;
         $case_folder->save();
 
+        $this->userlog->add(Auth::user()->user_id, 'Added Case File ID:'. $request->input('case_id'));
+
         session()->flash('status', true);
         return redirect()->route('case.details', ['case_id' => $request->input('case_id')]);
     }
@@ -389,6 +405,8 @@ class CaseController extends Controller
         $case = Casse::find($request->input('case_id'));
         $case->case_status = 'closed';
         $case->save();
+
+        $this->userlog->add(Auth::user()->user_id, 'Updated Case Status ID:'. $request->input('case_id'));
 
         session()->flash('status', true);
         return redirect()->route('case.all');

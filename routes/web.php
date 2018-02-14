@@ -10,6 +10,7 @@ Auth::routes();
 
 Route::get('home', 'HomeController@list')->name('home');
 
+Route::get('map/{case_id}', 'MapController@mapp')->name('mapp');
 
 Route::get('location/get_provinces/{region_code}', function($region_code) {
 	$provinces = \DB::table('refprovince')->where('regCode', '=', $region_code)->get();

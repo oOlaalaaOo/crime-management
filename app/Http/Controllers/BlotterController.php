@@ -7,12 +7,15 @@ use Illuminate\Http\Request;
 use DB;
 use Validator;
 use Auth;
+use App\Libraries\Userlog;
 
 class BlotterController extends Controller
 {
-    public function __construct()
-    {
+    protected $userlog;
 
+    public function __construct(Userlog $ul)
+    {
+        $this->userlog = $ul;
     }
 
     public function all()
@@ -58,6 +61,7 @@ class BlotterController extends Controller
 
      	if ($blotter->save())
      	{
+            $this->userlog->add(Auth::user()->user_id, 'Added Blotter ID:'. $blotter->blotter_id);
      		session()->flash('status', true);
      	}
      	else
@@ -113,6 +117,7 @@ class BlotterController extends Controller
 
      	if ($blotter->save())
      	{
+            $this->userlog->add(Auth::user()->user_id, 'Updated Blotter ID:'. $blotter->blotter_id);
      		session()->flash('status', true);
      	}
      	else

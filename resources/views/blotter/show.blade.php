@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="form-group @if($errors->has('complainant_address')) has-error @endif">
-                        <label for="complainant_address">complainant_address: </label>
+                        <label for="complainant_address">Complainant Address: </label>
                         <input type="text" id="complainant_address" name="complainant_address" class="form-control" value="{{ old('complainant_address', $blotter->complainant_address) }}">
                         @if($errors->has('complainant_address'))
                         <span class="help-block">{{ $errors->first('complainant_address') }}</span>

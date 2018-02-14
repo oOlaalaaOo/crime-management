@@ -6,12 +6,16 @@ use Illuminate\Http\Request;
 
 use DB;
 use Validator;
+use Auth;
+
+use App\Libraries\Userlog;
 
 class CrimeCategoryController extends Controller
 {
-    public function __construct()
-    {
+    protected $userlog;
 
+    public function __construct(Userlog $ul) {
+        $this->userlog = $ul;
     }
 
     public function all()
@@ -56,10 +60,12 @@ class CrimeCategoryController extends Controller
     	];
 
     	$insert = DB::table('crime_categories')
-    					->insert($data);
+    					->insertGetId($data);
 
     	if ($insert)
     	{
+            $this->userlog->add(Auth::user()->user_id, 'Added Crime Category ID:'. $insert);
+
     		session()->flash('status', true);
     		return redirect()->route('crime.category.all');
     	}
@@ -108,6 +114,7 @@ class CrimeCategoryController extends Controller
     					->update($data);
     	if ($update)
     	{
+            $this->userlog->add(Auth::user()->user_id, 'Updated Crime Category ID:'. $request->input('crime_category_id'));
     		session()->flash('status', true);
     		return redirect()->route('crime.category.all');
     	}
@@ -121,12 +128,13 @@ class CrimeCategoryController extends Controller
 
     public function delete(Request $request)
     {
-    	$delete = DB::table('crime_types')
-    					->where('crime_type_id', '=', $request->input('crime_type_id'))
+    	$delete = DB::table('crime_categories')
+    					->where('crime_category_id', '=', $request->input('crime_category_id'))
     					->delete();
 
     	if ($delete)
     	{
+            $this->userlog->add(Auth::user()->user_id, 'Deleted Crime Category ID:'. $request->input('crime_type_id'));
     		session()->flash('status', true);
     		return redirect()->route('crime.type.all');
     	}

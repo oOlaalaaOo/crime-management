@@ -28,6 +28,10 @@ class HomeController extends Controller
      */
     public function list() 
     {
+        if (Auth::check() && Auth::user()->user_type_id == 2)
+            {
+                return redirect()->route('case.all');
+            }
         $total_case = DB::table('cases')
                             ->count();
                             
