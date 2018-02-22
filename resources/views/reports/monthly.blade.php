@@ -8,7 +8,7 @@
                 <a href="{{ URL::to('home') }}">Case List</a>
             </li>
             <li class="active">
-                <strong>Reports Daily</strong>
+                <strong>Reports Monthly</strong>
             </li>
         </ol>
     </div>

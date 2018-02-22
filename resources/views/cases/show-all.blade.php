@@ -28,9 +28,11 @@
                         <div class="col-xs-6">
                             <h3>Cases</h3>
                         </div>
-
+                
                         <div class="col-xs-6">
+                            @if(Auth::user()->user_type_id == 2)
                             <a class="btn btn-warning pull-right" href="{{ route('case.add.view') }}"><i class="fa fa-plus"></i> New Case</a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -74,9 +76,10 @@
                                 <td>{{ date('F d, Y H:i:s', strtotime($data->created_at)) }}</td>
                                 <td>
                                     <a href="{{ route('case.details', ['case_id' => $data->case_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-mail-forward"></i> View</a> 
+                                    <a href="{{ route('case.details-full', ['case_id' => $data->case_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-mail-forward"></i> Case Report</a>
                                     @if($data->case_status == 'ongoing')
                                     <a href="{{ route('case.update.view', ['case_id' => $data->case_id]) }}" class="btn btn-default btn-sm" title="Edit details"><i class="fa fa-pencil"></i> Edit</a> 
-                                    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#status_modal"><i class="fa fa-legal"></i> Close Case</button>
+                                    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#status_modal"><i class="fa fa-legal"></i> Set Case Status</button>
                                     <!-- Modal -->
                                     <div class="modal fade" id="status_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                       <div class="modal-dialog modal-sm" role="document">
@@ -85,17 +88,30 @@
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                             <h4 class="modal-title" id="myModalLabel">Action: Update Status</h4>
                                           </div>
+                                          <form action="{{ route('case.status.update') }}" method="post">
+                                                {{ csrf_field() }}
                                           <div class="modal-body">
-                                            Confirm Update Status by clicking Confirm button
+                                            <label for="status">Select Status: </label>
+                                            <select required id="status" class="form-control" name="status">
+                                                <option value="">Select</option>
+                                                <option value="closed">Closed / Dropped</option>
+                                                <option value="dismissed">Dismised</option>
+                                                <option value="dismised upon filling">Dismissed Upon Filling</option>
+                                                <option value="filed in court">Filed in Court</option>
+                                                <option value="referred">Referred</option>
+                                                <option value="settled">Settled</option>
+                                                <option value="under investigation">Under Investigation</option>
+                                            </select>
+                                            
                                           </div>
                                           <div class="modal-footer">
-                                            <form action="{{ route('case.status.update') }}" method="post">
-                                                {{ csrf_field() }}
+                                            
                                                 <input type="hidden" name="case_id" value="{{ $data->case_id }}">
                                                 <button type="submit" class="btn btn-default">Confirm Update Status</button>
                                                 
-                                            </form>
+                                            
                                           </div>
+                                          </form>
                                         </div>
                                       </div>
                                     </div>

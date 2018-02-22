@@ -22,6 +22,15 @@ class ReportController extends Controller
 
     public function monthly(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'datepicker' => 'required' 
+        ]);
+
+        if ($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        
     	$datepicker = $request->input('datepicker');
 
     	$cDates = DB::table('cases')
@@ -66,6 +75,16 @@ class ReportController extends Controller
 
     public function yearly(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'datepicker' => 'required', 
+            'datepicker2' => 'required', 
+        ]);
+
+        if ($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
     	$datepicker = $request->input('datepicker');
     	$datepicker2 = $request->input('datepicker2');
 
@@ -112,6 +131,15 @@ class ReportController extends Controller
 
     public function daily(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'datepicker' => 'required' 
+        ]);
+
+        if ($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
     	$dates = explode(' - ', $request->datepicker);
 
     	$cDates = DB::table('cases')
@@ -146,6 +174,19 @@ class ReportController extends Controller
 	    	}
     	}
     	
+        // $types = DB::table('crime_types')->get();
+        // $classifications = DB::table('crime_classifications')->get();
+        // $offenses = DB::table('offenses')->get();
+        // $categories = DB::table('crime_categories')->get();
+        // return response()->json([
+        //     'cDates' => $cDates, 
+        //     'cases' => $cases, 
+        //     'case_details' => $case_details,
+        //     'types' => $types,
+        //     'classifications' => $classifications,
+        //     'offenses' => $offenses,
+        //     'categories' => $categories
+        // ]);
 
     	return view('reports.daily')
     			->with('active_menu', 'reports')
@@ -174,5 +215,27 @@ class ReportController extends Controller
     	return view('reports.daily')
     			->with('active_menu', 'reports')
                 ->with('active_submenu', 'report_daily');
+    }
+
+    public function user_logs_view()
+    {
+        return view('reports.user-logs')
+                ->with('active_menu', 'reports')
+                ->with('active_submenu', 'user_logs');
+    }
+
+    public function user_logs(Request $request)
+    {
+        $dates = explode(' - ', $request->datepicker);
+
+        $user_logs = \App\User_log::where('created_at', '>=' ,$dates[0])
+                                    ->where('created_at', '<=', $dates[1])
+                                    ->get();
+
+        return view('reports.user-logs')
+                ->with('active_menu', 'reports')
+                ->with('active_submenu', 'user_logs')
+                ->with('user_logs', $user_logs);
+                
     }
 }

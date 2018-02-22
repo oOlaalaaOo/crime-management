@@ -42,6 +42,14 @@
                         @endif
                     </div>
 
+                    <div class="form-group @if($errors->has('description')) has-error @endif">
+                        <label for="description">Description: </label>
+                        <input type="text" id="description" name="description" class="form-control" value="{{ old('description') }}">
+                        @if($errors->has('description'))
+                        <span class="help-block">{{ $errors->first('description') }}</span>
+                        @endif
+                    </div>
+
                     <div class="form-group">
                         <button type="button" data-toggle="modal" data-target="#submit-case" class="btn btn-success btn-lg" data-backdrop="static" data-keyboard="false">Add New Station</button>
                         <br />

@@ -11,7 +11,7 @@ use App\Case_victim;
 use App\Victim_file;
 use Image;
 use File;
-
+use Auth;
 class VictimController extends Controller
 {
     public function __construct() {
@@ -22,6 +22,9 @@ class VictimController extends Controller
     {
         $case_victims = DB::table('case_victims')
                             ->selectRaw('DISTINCT(victim_id)')
+                            ->leftJoin('cases', 'case_victims.case_id', '=', 'cases.case_id')
+                            ->leftJoin('user_cases', 'user_cases.case_id', '=', 'cases.case_id')
+                            ->where('user_cases.user_id', '=', Auth::user()->user_id)
                             ->get();
         $cvs = [];
 
@@ -156,6 +159,7 @@ class VictimController extends Controller
         $victim->last_name = $request->input('last_name');
         $victim->address = $request->input('victim_address');
         $victim->occupation = $request->input('victim_occupation');
+        $victim->contact_no = $request->input('victim_contact_no');
         $victim->birth_date = $request->input('victim_birth_date');
         $victim->sex = $request->input('victim_gender');
         $victim->civil_status = $request->input('victim_civil_status');
@@ -240,6 +244,7 @@ class VictimController extends Controller
         $victim->last_name = $request->input('last_name');
         $victim->address = $request->input('victim_address');
         $victim->occupation = $request->input('victim_occupation');
+        $victim->contact_no = $request->input('victim_contact_no');
         $victim->birth_date = $request->input('victim_birth_date');
         $victim->sex = $request->input('victim_gender');
         $victim->civil_status = $request->input('victim_civil_status');

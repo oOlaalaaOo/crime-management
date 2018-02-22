@@ -45,7 +45,7 @@ class StationController extends Controller
 
     	$station = new \App\Police_station;
     	$station->station = $request->input('station');
-    	$station->station_no = '';
+    	$station->description = $request->input('description');
 
     	if ($station->save())
     	{
@@ -82,7 +82,7 @@ class StationController extends Controller
 
     	$station = \App\Police_station::find($request->station_id);
     	$station->station = $request->input('station');
-    	$station->station_no = '';
+    	$station->description = $request->input('description');
 
     	if ($station->save())
     	{

@@ -23,6 +23,8 @@
     <link href="{{ asset('inspinia/css/plugins/chosen/bootstrap-chosen.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/css/plugins/dataTables/datatables.min.css') }} " rel="stylesheet">
     <link href="{{ asset('inspinia/css/plugins/daterangepicker/daterangepicker-bs3.css') }} " rel="stylesheet">
+    <link href="{{ asset('inspinia/css/plugins/datapicker/datepicker3.css') }} " rel="stylesheet">
+
 </head>
 
 <body class="skin-3">
@@ -81,6 +83,9 @@
                     <li @if($active_menu == 'reports') class="active" @endif>
                         <a href="#"><i class="fa fa-line-chart"></i> <span class="nav-label">Reports </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse @if($active_menu == 'reports') in @endif">
+                            @if(Auth::user()->user_type_id == 1)
+                            <li @if($active_submenu == 'user_logs') class="active" @endif><a href="{{ route('reports.user-logs-view') }}"><span class="nav-label">User Logs</span></a></li>
+                            @endif
                             <li @if($active_submenu == 'report_daily') class="active" @endif><a href="{{ route('reports.daily-view') }}"><span class="nav-label">Daily Report</span></a></li>
                             <li @if($active_submenu == 'report_monthly') class="active" @endif><a href="{{ route('reports.monthly-view') }}"> <span class="nav-label">Monthly Report</span></a></li>
                             <li @if($active_submenu == 'report_yearly') class="active" @endif><a href="{{ route('reports.yearly-view') }}"> <span class="nav-label">Yearly Report</span></a></li>
@@ -176,6 +181,7 @@
     <script src="{{ asset('inspinia/js/plugins/dataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/fullcalendar/moment.min.js') }}"></script>
     <script src="{{ asset('inspinia/js/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ asset('inspinia/js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
     
 
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
@@ -259,6 +265,16 @@
 
             $('#daterange').daterangepicker();
 
+            $('#data_1 .input-group.date').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: false,
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                endDate: '0d'
+            });
 
             $('#datepicker').daterangepicker({
                 format: 'YYYY-MM-DD',

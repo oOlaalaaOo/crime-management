@@ -31,6 +31,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Station</th>
+                                <th>Description</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -39,6 +40,7 @@
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>{{ $station->station }}</td>
+                                <td>{{ $station->description }}</td>
                                 <td>
                                     <a href="{{ route('stations.show', ['police_station_id' => $station->police_station_id]) }}" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></a> <a href="#" class="btn btn-xs btn-default"><i class="fa fa-remove"></i></a>
                                 </td>

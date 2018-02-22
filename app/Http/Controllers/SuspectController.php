@@ -11,6 +11,7 @@ use App\Case_suspect;
 use App\Suspect_file;
 use Image;
 use File;
+use Auth;
 
 class SuspectController extends Controller
 {
@@ -21,6 +22,9 @@ class SuspectController extends Controller
     public function all() {
     	$case_suspects = DB::table('case_suspects')
                             ->selectRaw('DISTINCT(suspect_id)')
+                            ->leftJoin('cases', 'case_suspects.case_id', '=', 'cases.case_id')
+                            ->leftJoin('user_cases', 'user_cases.case_id', '=', 'cases.case_id')
+                            ->where('user_cases.user_id', '=', Auth::user()->user_id)
                             ->get();
         $css = [];
 
@@ -156,6 +160,7 @@ class SuspectController extends Controller
         $suspect->last_name = $request->input('last_name');
         $suspect->address = $request->input('address');
         $suspect->occupation = $request->input('occupation');
+        $suspect->contact_no = $request->input('contact_no');
         $suspect->birth_date = $request->input('birth_date');
         $suspect->sex = $request->input('gender');
         $suspect->civil_status = $request->input('civil_status');
@@ -235,6 +240,7 @@ class SuspectController extends Controller
         $suspect->last_name = $request->input('last_name');
         $suspect->address = $request->input('address');
         $suspect->occupation = $request->input('occupation');
+        $suspect->contact_no = $request->input('contact_no');
         $suspect->birth_date = $request->input('birth_date');
         $suspect->sex = $request->input('gender');
         $suspect->civil_status = $request->input('civil_status');

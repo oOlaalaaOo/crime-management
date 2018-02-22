@@ -28,7 +28,9 @@
                             <h3>Blotter List</h3>
                         </div>
                         <div class="col-xs-6">
+                            @if(Auth::user()->user_type_id == 2)
                             <a class="btn btn-warning pull-right" href="{{ route('blotter.add.view') }}"><i class="fa fa-plus"></i> Add New</a>
+                            @endif
                         </div>
                     </div>
                 </div>

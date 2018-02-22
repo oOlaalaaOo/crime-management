@@ -9,7 +9,7 @@
                 <a href="{{ route('case.all') }}">Case List</a>
             </li>
             <li class="active">
-                <strong>Case Details</strong>
+                <strong>Case Details-Full</strong>
             </li>
         </ol>
     </div>
@@ -33,9 +33,7 @@
                             <h2>Case Details</h2>
                         </div>
                         <div class="col-xs-6 text-right">
-                            @if(Auth::user()->user_type_id == 2 && $case->case_status != 'solved')
-                            <a href="{{ route('case.add-crime-view', ['case_id' => $case->case_id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-plus"></i> Add Crime</a>
-                            @endif
+                           
                         </div>
                     </div>
                     
@@ -65,7 +63,7 @@
                                 <th>Offense</th>
                                 <th>Classification</th>
                                 <th>Location</th>
-                                <th></th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -77,7 +75,7 @@
                                 <td>{{ $cd->offense_name }}</td>
                                 <td>{{ $cd->crime_classification_name }}</td>
                                 <td>{{ $cd->home_address }}</td>
-                                <td><a target="_blank" href="{{ route('mapp', ['case_id' => $cd->case_detail_id]) }}" class="btn btn-xs btn-default"><i class="fa fa-map-marker"></i> See Map</a></td>
+                               
                             </tr>
                             @endforeach
                         </tbody>
@@ -86,7 +84,7 @@
             </div>
         </div>
        
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <div class="row">
@@ -94,27 +92,52 @@
                             <h2>Victims</h2>
                         </div>
                         <div class="col-xs-6 text-right">
-                            @if(Auth::user()->user_type_id == 2 && $case->case_status != 'solved')
-                            <a href="{{ route('victim.add.view', ['case_id' => $case->case_id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-plus"></i> Add Victim</a>
-                            @endif
+                           
+                            
                         </div>
                     </div>
                     
                 </div>
                 <div class="ibox-content">
-                    
-                    <div class="list-group">
-                       @foreach($victims as $data)
-                      <a href="@if(Auth::user()->user_type_id == 2){{ route('victim.update.view', ['victim_id' => $data->victim_id, 'case_id' => $case->case_id]) }} @else # @endif" class="list-group-item"> - {{ $data->first_name . ' ' . $data->mid_name . ' ' . $data->last_name }}<span class="label label-dark pull-right">{{ $data->victim_status}}</span></a>
-                       @endforeach
-                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Contact No.</th>
+                                <th>Address</th>
+                                <th>Occupation</th>
+                                <th>BirthDate</th>
+                                <th>Sex</th>
+                                <th>Civil Status</th>
+                                <th>Nationality</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($victims as $data)
+                            <tr>
+                                <td><strong>{{ $loop->index + 1 }}</strong></td>
+                                <td>{{ $data->first_name . ' ' . $data->mid_name . ' ' . $data->last_name }}</td>
+                                <td>{{ $data->contact_no }}</td>
+                                <td>{{ $data->address }}</td>
+                                <td>{{ $data->occupation }}</td>
+                                <td>{{ $data->birth_date }}</td>
+                                <td>{{ $data->sex }}</td>
+                                <td>{{ $data->civil_status }}</td>
+                                <td>{{ $data->nationality }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                   
 
                 </div>
             </div>
 
         </div>
 
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <div class="row">
@@ -122,22 +145,49 @@
                             <h2>Suspects</h2>
                         </div>
                         <div class="col-xs-6 text-right">
-                            @if(Auth::user()->user_type_id == 2 && $case->case_status != 'solved')
-                            <a href="{{ route('suspect.add.view', ['case_id' => $case->case_id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-plus"></i> Add Suspect</a>
-                            @endif
+                           
+                            
                         </div>
                     </div>
+                    
                 </div>
                 <div class="ibox-content">
-                    
-                    <div class="list-group">
-                       @foreach($suspects as $data)
-                      <a href="@if(Auth::user()->user_type_id == 2){{ route('suspect.update.view', ['suspect_id' => $data->suspect_id, 'case_id' => $case->case_id]) }} @else # @endif" class="list-group-item"> - {{ $data->first_name . ' ' . $data->mid_name . ' ' . $data->last_name }}<span class="label label-dark pull-right">{{ $data->suspect_status}}</span></a>
-                       @endforeach
-                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Contact No.</th>
+                                <th>Address</th>
+                                <th>Occupation</th>
+                                <th>BirthDate</th>
+                                <th>Sex</th>
+                                <th>Civil Status</th>
+                                <th>Nationality</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($suspects as $data)
+                            <tr>
+                                <td><strong>{{ $loop->index + 1 }}</strong></td>
+                                <td>{{ $data->first_name . ' ' . $data->mid_name . ' ' . $data->last_name }}</td>
+                                <td>{{ $data->contact_no }}</td>
+                                <td>{{ $data->address }}</td>
+                                <td>{{ $data->occupation }}</td>
+                                <td>{{ $data->birth_date }}</td>
+                                <td>{{ $data->sex }}</td>
+                                <td>{{ $data->civil_status }}</td>
+                                <td>{{ $data->nationality }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                   
 
                 </div>
             </div>
+
         </div>
         
         <div class="col-sm-12">
@@ -149,9 +199,7 @@
                         </div>
 
                         <div class="col-xs-6 text-right">
-                            @if(Auth::user()->user_type_id == 2 && $case->case_status != 'solved')
-                            <a href="{{ route('case.files.add.view', ['case_id' => $case->case_id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-plus"></i> Add Files</a>
-                            @endif
+                           
                         </div>
                     </div>
                     

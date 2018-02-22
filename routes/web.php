@@ -52,6 +52,7 @@ Route::get('case/update/{case_id}', 'CaseController@update_view')->name('case.up
 Route::post('case/update', 'CaseController@update')->name('case.update');
 Route::get('case/all', 'CaseController@all')->name('case.all');
 Route::get('case/details/{case_id}', 'CaseController@details')->name('case.details');
+Route::get('case/details-full/{case_id}', 'CaseController@details_full')->name('case.details-full');
 Route::get('case/search', 'CaseController@search')->name('case.search');
 Route::get('case/files/add/{case_id}', 'CaseController@files_add_view')->name('case.files.add.view');
 Route::post('case/files/add', 'CaseController@files_add')->name('case.files.add');
@@ -139,7 +140,9 @@ Route::get('blotter/view/{blotter_id}', 'BlotterController@view')->name('blotter
 Route::get('reports/daily', 'ReportController@daily')->name('reports.daily');
 Route::get('reports/monthly', 'ReportController@monthly')->name('reports.monthly');
 Route::get('reports/yearly', 'ReportController@yearly')->name('reports.yearly');
+Route::get('reports/user-logs', 'ReportController@user_logs')->name('reports.user-logs');
 
 Route::get('reports/daily-view', 'ReportController@daily_view')->name('reports.daily-view');
 Route::get('reports/monthly-view', 'ReportController@monthly_view')->name('reports.monthly-view');
 Route::get('reports/yearly-view', 'ReportController@yearly_view')->name('reports.yearly-view');
+Route::get('reports/user-logs-view', 'ReportController@user_logs_view')->name('reports.user-logs-view');

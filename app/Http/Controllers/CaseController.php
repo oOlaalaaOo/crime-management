@@ -362,6 +362,56 @@ class CaseController extends Controller
                 ->with('case_files', $case_files);
     }
 
+    public function details_full($case_id) {
+        $isAdmin = Auth::user()->user_type_id ;
+        $case = DB::table('user_cases')
+                    ->leftJoin('cases', 'user_cases.case_id', '=', 'cases.case_id')
+                    ->when($isAdmin == 2, function ($query) use ($isAdmin) {
+                        return $query->where('user_cases.user_id', '=', Auth::user()->user_id);
+                    })
+                    ->where('cases.case_id', '=', $case_id)
+                    ->first();
+
+        $case_details = DB::table('user_cases')
+                            ->leftJoin('cases', 'user_cases.case_id', '=', 'cases.case_id')
+                            ->leftJoin('case_details', 'cases.case_id', '=', 'case_details.case_id')
+                            ->leftJoin('offenses', 'case_details.offense_id', '=', 'offenses.offense_id')
+                            ->leftJoin('crime_classifications', 'case_details.crime_classification_id', '=', 'crime_classifications.crime_classification_id')
+                            ->leftJoin('crime_categories', 'case_details.crime_category_id', '=', 'crime_categories.crime_category_id')
+                            ->leftJoin('crime_types', 'case_details.crime_type_id', '=', 'crime_types.crime_type_id')
+                            ->leftJoin('crime_locations', 'case_details.crime_location_id', '=', 'crime_locations.crime_location_id')
+                            ->leftJoin('refcitymun', 'crime_locations.city_id', '=', 'refcitymun.citymunCode')
+                            ->leftJoin('crime_coordinates', 'case_details.case_detail_id', '=', 'crime_coordinates.case_detail_id')
+                            ->when($isAdmin == 2, function ($query) use ($isAdmin) {
+                                return $query->where('user_cases.user_id', '=', Auth::user()->user_id);
+                            })
+                            ->where('cases.case_id', '=', $case_id)
+                            ->get();
+
+        $victims = DB::table('case_victims')
+                        ->leftJoin('victims', 'case_victims.victim_id', '=', 'victims.victim_id')
+                        ->where('case_victims.case_id', '=', $case_id)
+                        ->get();
+
+        $suspects = DB::table('case_suspects')
+                        ->leftJoin('suspects', 'case_suspects.suspect_id', '=', 'suspects.suspect_id')
+                        ->where('case_suspects.case_id', '=', $case_id)
+                        ->get();
+
+        $case_files = DB::table('case_folders')
+                            ->where('case_id', '=', $case_id)
+                            ->get();
+
+        return view('cases.details-full')
+                ->with('active_menu', 'case')
+                ->with('active_submenu', '')
+                ->with('case', $case)
+                ->with('case_details', $case_details)
+                ->with('victims', $victims)
+                ->with('suspects', $suspects)
+                ->with('case_files', $case_files);
+    }
+
     public function files_add_view($case_id) {
         return view('cases.files-add-view')
                 ->with('active_menu', 'cases')
@@ -403,7 +453,7 @@ class CaseController extends Controller
     public function status_update(Request $request) {
 
         $case = Casse::find($request->input('case_id'));
-        $case->case_status = 'closed';
+        $case->case_status = $request->input('status');
         $case->save();
 
         $this->userlog->add(Auth::user()->user_id, 'Updated Case Status ID:'. $request->input('case_id'));

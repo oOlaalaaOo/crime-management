@@ -115,6 +115,13 @@
                                 <span class="help-block">{{ $errors->first('occupation') }}</span>
                                 @endif
                             </div>
+                            <div class="form-group @if($errors->has('contact_no')) has-error @endif">
+                                <label for="contact_no">Contact No.: </label>
+                                <input type="text" id="contact_no" name="contact_no" class="form-control" value="{{ old('contact_no', $suspect->contact_no) }}">
+                                @if($errors->has('contact_no'))
+                                <span class="help-block">{{ $errors->first('contact_no') }}</span>
+                                @endif
+                            </div>
                             <div class="form-group @if($errors->has('birth_date')) has-error @endif">
                                 <label for="birth_date">Birth Date: </label>
                                 <input type="text" id="birth_date" name="birth_date" class="form-control" value="{{ old('birth_date', $suspect->birth_date) }}" placeholder="yyyy-mm-dd">

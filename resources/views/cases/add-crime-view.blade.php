@@ -87,12 +87,13 @@
                                 </div>
 
                                 <div class="col-xs-6">
-                                    <div class="form-group @if($errors->has('incident_at')) has-error @endif">
-                                        <label for="incident_at">Incident Date</label>
-                                        <input type="text" name="incident_at" id="incident_at" class="form-control" placeholder="yyyy-mm-dd" value="{{ old('incident_at') }}">
-                                        @if($errors->has('incident_at'))
+                                    <div class="form-group" id="data_1">
+                                        <label class="font-normal">Incident Date</label>
+                                        <div class="input-group date">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" name="incident_at" id="incident_at" class="form-control" placeholder="yyyy-mm-dd" value="{{ old('incident_at') }}">
+
+                                        </div>
                                         <span class="help-block">{{ $errors->first('incident_at') }}</span>
-                                        @endif
                                     </div>
 
                                     <div class="form-group @if($errors->has('home_address')) has-error @endif">

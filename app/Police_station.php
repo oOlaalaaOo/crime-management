@@ -9,6 +9,6 @@ class Police_station extends Model
     protected $table = 'police_stations';
     protected $primaryKey = 'police_station_id';
     protected $fillable = [
-    	'station', 'station_no'
+    	'station', 'description'
     ];
 }
