@@ -48,7 +48,7 @@ Route::get('case/add', 'CaseController@add_view')->name('case.add.view');
 Route::post('case/add', 'CaseController@add')->name('case.add');
 Route::get('case/add-crime/{case_id}', 'CaseController@add_crime_view')->name('case.add-crime-view');
 Route::post('case/add-crime', 'CaseController@add_crime')->name('case.add-crime');
-Route::get('case/update/{case_id}', 'CaseController@update_view')->name('case.update.view');
+Route::get('case/update/{case_id}/{case_detail_id}', 'CaseController@update_view')->name('case.update.view');
 Route::post('case/update', 'CaseController@update')->name('case.update');
 Route::get('case/all', 'CaseController@all')->name('case.all');
 Route::get('case/details/{case_id}', 'CaseController@details')->name('case.details');
@@ -141,8 +141,12 @@ Route::get('reports/daily', 'ReportController@daily')->name('reports.daily');
 Route::get('reports/monthly', 'ReportController@monthly')->name('reports.monthly');
 Route::get('reports/yearly', 'ReportController@yearly')->name('reports.yearly');
 Route::get('reports/user-logs', 'ReportController@user_logs')->name('reports.user-logs');
+Route::get('reports/realistic', 'ReportController@realistic')->name('reports.realistic');
 
 Route::get('reports/daily-view', 'ReportController@daily_view')->name('reports.daily-view');
 Route::get('reports/monthly-view', 'ReportController@monthly_view')->name('reports.monthly-view');
 Route::get('reports/yearly-view', 'ReportController@yearly_view')->name('reports.yearly-view');
 Route::get('reports/user-logs-view', 'ReportController@user_logs_view')->name('reports.user-logs-view');
+Route::get('reports/realistic-view', 'ReportController@realistic_view')->name('reports.realistic-view');
+
+Route::get('case/details/delete/{case_id}/{case_detail_id}', 'CaseController@case_details_delete')->name('case.details.delete');

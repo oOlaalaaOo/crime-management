@@ -27,5 +27,9 @@ class Casse extends Model
  	public function blotter() {
  		return $this->hasOne('App\Blotter');
  	}
+
+ 	public function case_details() {
+ 		return $this->hasMany('App\Case_detail', 'case_id');
+ 	}
  	
 }

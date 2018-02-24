@@ -44,10 +44,12 @@
 
         var lat = '{{ $case_details->crime_coordinate_lat }}';
         var lng = '{{ $case_details->crime_coordinate_long }}';
+        console.log(lat)
+        console.log(lng)
         // console.log(lat + ' ' + lng);
         var mapProp= {
             center:new google.maps.LatLng(lat,lng),
-            zoom:18,
+            zoom:14,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
@@ -56,6 +58,7 @@
             position: mapProp.center,
             animation: google.maps.Animation.BOUNCE
         });
+
         marker.setMap(map);
     }
     </script>

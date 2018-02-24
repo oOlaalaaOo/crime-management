@@ -77,7 +77,21 @@
                                 <td>{{ $cd->offense_name }}</td>
                                 <td>{{ $cd->crime_classification_name }}</td>
                                 <td>{{ $cd->home_address }}</td>
-                                <td><a target="_blank" href="{{ route('mapp', ['case_id' => $cd->case_detail_id]) }}" class="btn btn-xs btn-default"><i class="fa fa-map-marker"></i> See Map</a></td>
+                                <td>
+                                    
+
+                                    <div class="btn-group">
+                                        <li data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle"><i class="fa fa-cog"></i> Actions</li>
+                                        <ul class="dropdown-menu" style="right: 0; left: auto;">
+                                            <li><a href="{{ route('case.update.view', ['case_id' => $case->case_id, 'case_detail_id' => $cd->case_detail_id]) }}" class="font-bold"><i class="fa fa-edit"></i> Edit</a></li>
+                                            <li><a href="{{ route('case.details.delete', ['case_id' => $case->case_id, 'case_detail_id' => $cd->case_detail_id]) }}" class="font-bold"><i class="fa fa-trash"></i> Remove</a></li>
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a target="_blank" href="{{ route('mapp', ['case_id' => $cd->case_detail_id]) }}" class="btn btn-xs btn-default font-bold"><i class="fa fa-map-marker"></i> See Map</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

@@ -83,22 +83,32 @@ $(document).ready(function() {
 				id = $(this).val();
 			}
 
-			$.ajax({
-				url:  'http://localhost:8000/crime/get-crime-categories/' + id,
-				type: 'GET',
-				success: function(resp) {
-					console.log(resp);
-					$crime_category.empty();
-					var data = resp.crime_categories;
-					$crime_category.append('<option value="">Choose</option>')
-					data.forEach((d) => {
-						$crime_category.append($('<option>', { 
-					        value: d.crime_category_id,
-					        text : d.crime_category_name 
-					    }));
-					});
-				}
-			})
+			if ($(this).val() == 1) {
+				$crime_category.prop('disabled', '');
+				$offense_detail.prop('disabled', '');
+				$.ajax({
+					url:  'http://localhost:8000/crime/get-crime-categories/' + id,
+					type: 'GET',
+					success: function(resp) {
+						console.log(resp);
+						$crime_category.empty();
+						var data = resp.crime_categories;
+						$crime_category.append('<option value="">Choose</option>')
+						data.forEach((d) => {
+							$crime_category.append($('<option>', { 
+						        value: d.crime_category_id,
+						        text : d.crime_category_name 
+						    }));
+						});
+					}
+				})
+			} else {
+				$crime_category.val('');
+				$offense_detail.val('');
+				$crime_category.prop('disabled', 'disabled');
+				$offense_detail.prop('disabled', 'disabled');
+			}
+			
 		});
 
 		$crime_category.on('change', function(e) {

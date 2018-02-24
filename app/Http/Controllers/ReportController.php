@@ -228,8 +228,8 @@ class ReportController extends Controller
     {
         $dates = explode(' - ', $request->datepicker);
 
-        $user_logs = \App\User_log::where('created_at', '>=' ,$dates[0])
-                                    ->where('created_at', '<=', $dates[1])
+        $user_logs = \App\User_log::whereDate('created_at', '>=' ,$dates[0])
+                                    ->whereDate('created_at', '<=', $dates[1])
                                     ->get();
 
         return view('reports.user-logs')
@@ -237,5 +237,103 @@ class ReportController extends Controller
                 ->with('active_submenu', 'user_logs')
                 ->with('user_logs', $user_logs);
                 
+    }
+
+    public function realistic_view()
+    {
+        return view('reports.realistic')
+                ->with('active_menu', 'reports')
+                ->with('active_submenu', 'report_realistic');
+    }
+
+    public function realistic(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'datepicker' => 'required' 
+        ]);
+
+        if ($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $dates = explode(' - ', $request->datepicker);
+
+        $crimes = \App\Crime_type::with(['crime_categories', 'crime_categories.offenses', 'crime_categories.offenses.crime_classifications'])->get();
+
+        $cType = [];
+        $cTypeCleared = [];
+        $cTypeSolved = [];
+
+        $cCat = [];
+        $cCatCleared = [];
+        $cCatSolved = [];
+
+        $cOff = [];
+        $cOffCleared = [];
+        $cOffSolved = [];
+
+        foreach ($crimes as $c)
+        {
+            $cType[$c->crime_type_id] = \App\Case_detail::where('crime_type_id', $c->crime_type_id)->count();
+            $cTypeCleared[$c->crime_type_id] = DB::table('case_details')
+                                                    ->leftJoin('cases', 'case_details.case_id', '=', 'cases.case_id')
+                                                    ->where('case_details.crime_type_id', $c->crime_type_id)
+                                                    ->where('cases.case_status', 'closed')
+                                                    ->count();
+            $cTypeSolved[$c->crime_type_id] = DB::table('case_details')
+                                                    ->leftJoin('cases', 'case_details.case_id', '=', 'cases.case_id')
+                                                    ->where('case_details.crime_type_id', $c->crime_type_id)
+                                                    ->where('cases.case_status', 'solved')
+                                                    ->count();
+            foreach ($c->crime_categories as $cat)
+            {
+                $cCat[$cat->crime_category_id] = DB::table('crime_categories')
+                                                    ->where('crime_category_id', $cat->crime_category_id)
+                                                    ->count();
+                $cCatCleared[$cat->crime_category_id] = DB::table('case_details')
+                                                    ->leftJoin('cases', 'case_details.case_id', '=', 'cases.case_id')
+                                                    ->where('case_details.crime_category_id', $cat->crime_category_id)
+                                                    ->where('cases.case_status', 'closed')
+                                                    ->count();
+                $cCatSolved[$cat->crime_category_id] = DB::table('case_details')
+                                                    ->leftJoin('cases', 'case_details.case_id', '=', 'cases.case_id')
+                                                    ->where('case_details.crime_category_id', $cat->crime_category_id)
+                                                    ->where('cases.case_status', 'solved')
+                                                    ->count();
+
+                foreach ($cat->offenses as $off)
+                {
+                    $cOff[$off->offense_id] = DB::table('offenses')
+                                                    ->where('offense_id', $off->offense_id)
+                                                    ->count();
+                    $cOffCleared[$off->offense_id] = DB::table('case_details')
+                                                    ->leftJoin('cases', 'case_details.case_id', '=', 'cases.case_id')
+                                                    ->where('case_details.offense_id', $off->offense_id)
+                                                    ->where('cases.case_status', 'closed')
+                                                    ->count();
+                    $cOffSolved[$off->offense_id] = DB::table('case_details')
+                                                    ->leftJoin('cases', 'case_details.case_id', '=', 'cases.case_id')
+                                                    ->where('case_details.offense_id', $off->offense_id)
+                                                    ->where('cases.case_status', 'solved')
+                                                    ->count();
+                }
+            }
+        }
+
+        return view('reports.realistic', [
+            'active_menu' => 'reports',
+            'active_submenu' => 'report_realistic',
+            'crimes' => $crimes,
+            'cType' => $cType,
+            'cTypeCleared' => $cTypeCleared,
+            'cTypeSolved' => $cTypeSolved,
+            'cCat' => $cCat,
+            'cCatCleared' => $cCatCleared,
+            'cCatSolved' => $cCatSolved,
+            'cOff' => $cOff,
+            'cOffCleared' => $cOffCleared,
+            'cOffSolved' => $cOffSolved
+        ]);
     }
 }

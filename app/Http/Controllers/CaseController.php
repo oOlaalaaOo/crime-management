@@ -74,8 +74,6 @@ class CaseController extends Controller
     		'home_address'        => 'required',
     		'incident_at'         => 'required|date_format:"Y-m-d"|before:'.date('Y-m-d'),
     		'crime_type'          => 'required',
-    		'crime_category'      => 'required',
-            'offense'               => 'required',
             'lat'                   => 'nullable|numeric',
     		'long'                  => 'nullable|numeric',
     	]);
@@ -199,7 +197,7 @@ class CaseController extends Controller
         $crime_coordinate->case_detail_id = $case_detail->case_detail_id;
         $crime_coordinate->save();
 
-        $this->userlog->add(Auth::user()->user_id, 'Added Case ID:'. $case->case_id);
+        $this->userlog->add(Auth::user()->user_id, 'Added Case ID:'. $request->case_id);
 
         session()->flash('status', true);
 
@@ -243,7 +241,7 @@ class CaseController extends Controller
                 ->with('case_no', $case_no);
     }
 
-    public function update_view($case_id) {
+    public function update_view($case_id, $case_detail_id) {
         $case = DB::table('user_cases')
                             ->leftJoin('cases', 'user_cases.case_id', '=', 'cases.case_id')
                             ->leftJoin('case_details', 'cases.case_id', '=', 'case_details.case_id')
@@ -255,6 +253,7 @@ class CaseController extends Controller
                             ->leftJoin('crime_coordinates', 'case_details.case_detail_id', '=', 'crime_coordinates.case_detail_id')
                             ->where('user_cases.user_id', '=', Auth::user()->user_id)
                             ->where('cases.case_id', '=', $case_id)
+                            ->where('case_details.case_detail_id', '=', $case_detail_id)
                             ->first();
 
         $crime_classifications = DB::table('crime_classifications')->get();
@@ -461,5 +460,12 @@ class CaseController extends Controller
         session()->flash('status', true);
         return redirect()->route('case.all');
 
+    }
+
+    public function case_details_delete($case_id, $case_detail_id)
+    {
+        $delete = DB::table('case_details')->where('case_detail_id', $case_detail_id)->delete();
+        session()->flash('status', true);
+        return redirect()->route('case.details', ['case_id' => $case_id]);
     }
 }

@@ -85,6 +85,7 @@
                         <ul class="nav nav-second-level collapse @if($active_menu == 'reports') in @endif">
                             @if(Auth::user()->user_type_id == 1)
                             <li @if($active_submenu == 'user_logs') class="active" @endif><a href="{{ route('reports.user-logs-view') }}"><span class="nav-label">User Logs</span></a></li>
+                            <li @if($active_submenu == 'realistic') class="active" @endif><a href="{{ route('reports.realistic-view') }}"><span class="nav-label">Realistic Report</span></a></li>
                             @endif
                             <li @if($active_submenu == 'report_daily') class="active" @endif><a href="{{ route('reports.daily-view') }}"><span class="nav-label">Daily Report</span></a></li>
                             <li @if($active_submenu == 'report_monthly') class="active" @endif><a href="{{ route('reports.monthly-view') }}"> <span class="nav-label">Monthly Report</span></a></li>

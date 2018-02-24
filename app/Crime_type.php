@@ -11,4 +11,9 @@ class Crime_type extends Model
     protected $fillable = [
     	'crime_type_name'
     ];
+
+    public function crime_categories()
+    {
+    	return $this->hasMany('App\Crime_category', 'crime_type_id');
+    }
 }

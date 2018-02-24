@@ -78,7 +78,7 @@
                                     <a href="{{ route('case.details', ['case_id' => $data->case_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-mail-forward"></i> View</a> 
                                     <a href="{{ route('case.details-full', ['case_id' => $data->case_id]) }}" class="btn btn-sm btn-default"><i class="fa fa-mail-forward"></i> Case Report</a>
                                     @if($data->case_status == 'ongoing')
-                                    <a href="{{ route('case.update.view', ['case_id' => $data->case_id]) }}" class="btn btn-default btn-sm" title="Edit details"><i class="fa fa-pencil"></i> Edit</a> 
+                                    
                                     <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#status_modal"><i class="fa fa-legal"></i> Set Case Status</button>
                                     <!-- Modal -->
                                     <div class="modal fade" id="status_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

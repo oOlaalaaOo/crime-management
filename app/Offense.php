@@ -11,4 +11,14 @@ class Offense extends Model
     protected $fillable = [
     	'crime_category_id', 'offense_name', 'offense_description'
     ];
+
+    public function crime_classifications()
+    {
+    	return $this->hasMany('App\Crime_classification', 'offense_id');
+    }
+
+    public function crime_category()
+    {
+    	return $this->belongsTo('App\Crime_category'. 'category_id');
+    }
 }

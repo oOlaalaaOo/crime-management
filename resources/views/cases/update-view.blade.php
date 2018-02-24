@@ -107,30 +107,46 @@
                                         <span class="help-block">{{ $errors->first('home_address') }}</span>
                                         @endif
                                     </div>
-                                    
-                                    <h4>Coordinates</h4>
-
-                                    <div class="form-group @if($errors->has('lat')) has-error @endif">
-                                        <label for="lat">Latitude</label>
-                                        <input type="text" class="form-control" name="lat" id="lat" value="{{ old('lat', $case->crime_coordinate_lat) }}" />
-                                        
-                                        @if($errors->has('lat'))
-                                        <span class="help-block">{{ $errors->first('lat') }}</span>
-                                        @endif
-                                    </div>
-
-                                    <div class="form-group @if($errors->has('long')) has-error @endif">
-                                        <label for="long">Longitude</label>
-                                        <input type="text" class="form-control" name="long" id="long" value="{{ old('long', $case->crime_coordinate_long) }}" />
-                                        
-                                        @if($errors->has('long'))
-                                        <span class="help-block">{{ $errors->first('long') }}</span>
-                                        @endif
-                                    </div>
-
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h2>Map <small style="font-size: 11px"><i>(Plese click on the map to get its coordinates)</i></small></h2>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <div id="map" style="width:100%;height:300px;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <h4>Coordinates</h4>
 
+                                                    <div class="form-group @if($errors->has('lat')) has-error @endif">
+                                                        <label for="lat">Latitude</label>
+                                                        <input type="text" class="form-control" name="lat" id="lat" value="{{ old('lat', $case->crime_coordinate_lat) }}" />
+                                                        
+                                                        @if($errors->has('lat'))
+                                                        <span class="help-block">{{ $errors->first('lat') }}</span>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="form-group @if($errors->has('long')) has-error @endif">
+                                                        <label for="long">Longitude</label>
+                                                        <input type="text" class="form-control" name="long" id="long" value="{{ old('long', $case->crime_coordinate_long) }}" />
+                                                        
+                                                        @if($errors->has('long'))
+                                                        <span class="help-block">{{ $errors->first('long') }}</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-xs-4">
                                     <br />
@@ -164,4 +180,67 @@
         </div>
     </div>
 </div>
+@endsection
+@section('more_scripts')
+    <script>
+    function myMap() {
+
+        var lat = '{{ $case->crime_coordinate_lat }}';
+        var lng = '{{ $case->crime_coordinate_long }}';
+        
+        markers = []
+
+        var mapProp= {
+            center:new google.maps.LatLng(lat,lng),
+            zoom:14,
+            mapTypeId: google.maps.MapTypeId.TERRAIN
+        };
+
+        var map = new google.maps.Map(document.getElementById("map"), mapProp);
+        var marker = new google.maps.Marker({
+            position: mapProp.center,
+            animation: google.maps.Animation.BOUNCE
+        });
+
+        marker.setMap(map);
+
+        function addMarker(location) {
+            var markerr = new google.maps.Marker({
+              position: location,
+              map: map
+            });
+            markers.push(markerr);
+        }
+
+        function setMapOnAll(map) {
+            for (var i = 0; i < markers.length; i++) {
+              markers[i].setMap(map);
+            }
+        }
+
+        function clearMarkers() {
+            setMapOnAll(null);
+        }
+
+        function showMarkers() {
+            setMapOnAll(map);
+        }
+
+        function deleteMarkers() {
+            clearMarkers();
+            markers = [];
+        }
+
+        google.maps.event.addListener(map, 'click', function(event) {
+            clearMarkers()
+            markers = []
+            addMarker(event.latLng)
+
+            document.getElementById('lat').value = event.latLng.lat()
+            document.getElementById('long').value = event.latLng.lng()
+
+        });
+    }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4g5tTbLP8pq1P6W0VtAc7TY8bMcc3Mm0&callback=myMap"></script>
 @endsection
